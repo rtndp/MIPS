@@ -22,7 +22,7 @@ public class HLT extends Instruction{
 
 	@Override
 	public void executeInstruction() {
-		// TODO Auto-generated method stub
+		//Do nothing here
 		
 	}
 

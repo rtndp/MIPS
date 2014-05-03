@@ -41,8 +41,8 @@ public class DADDI extends Instruction{
 
 	@Override
 	public void executeInstruction() {
-		// TODO Auto-generated method stub
 		
+		destination=source + immediate;
 	}
 
 	@Override

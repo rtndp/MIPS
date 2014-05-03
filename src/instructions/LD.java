@@ -41,7 +41,8 @@ public class LD extends Instruction{
 
 	@Override
 	public void executeInstruction() {
-		// TODO Auto-generated method stub
+		//TODO - Complete this method 
+		destination = immediate + source;
 		
 	}
 

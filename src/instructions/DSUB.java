@@ -44,8 +44,8 @@ public class DSUB extends Instruction{
 
 	@Override
 	public void executeInstruction() {
-		// TODO Auto-generated method stub
-		
+
+		destination = source1 - source2;
 	}
 
 	@Override
