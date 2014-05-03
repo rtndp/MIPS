@@ -9,6 +9,7 @@ public abstract class FUNCTIONALUNIT {
 	private boolean isPipelined;
 	private boolean isAvailable;
 	private int clockCyclesRequired;
+	private int pipelineSize;
 	private Queue<Instruction> instructionQueue;
 
 	
@@ -45,7 +46,16 @@ public abstract class FUNCTIONALUNIT {
 		this.instructionQueue = instructionQueue;
 	}
 	
+	public int getPipelineSize() {
+		return pipelineSize;
+	}
+
+	public void setPipelineSize(int pipelineSize) {
+		this.pipelineSize = pipelineSize;
+	}
+	
 	public abstract void addInstructionToQueue(Instruction instruction);
 	public abstract Instruction removeInstructionFromQueue();
+	
 	
 }
