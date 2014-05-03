@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MULD extends Instruction{
+	
 	String sourceLabel1;
 	String sourceLabel2;
 	String destinationLabel;
@@ -43,6 +44,18 @@ public class MULD extends Instruction{
 
 	@Override
 	public void executeInstruction() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void decodeInstruction() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void writeBackResult() {
 		// TODO Auto-generated method stub
 		
 	}

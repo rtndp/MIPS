@@ -45,4 +45,16 @@ public class SD extends Instruction{
 		
 	}
 
+	@Override
+	public void decodeInstruction() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void writeBackResult() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
