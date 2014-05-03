@@ -45,4 +45,10 @@ public class BEQ extends Instruction{
 		return "BEQ "+" "+leftLabel+" "+rightLabel+" "+destinationLabel;
 	}
 
+	@Override
+	public void executeInstruction() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

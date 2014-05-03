@@ -39,4 +39,10 @@ public class DADDI extends Instruction{
 		return "DADDI " +destinationLabel+" "+sourceLabel+" "+immediate;
 	}
 
+	@Override
+	public void executeInstruction() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

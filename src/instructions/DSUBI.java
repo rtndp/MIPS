@@ -41,4 +41,10 @@ public class DSUBI extends Instruction{
 		return "DSUBI " + destinationLabel +" "+ sourceLabel +" "+ immediate;
 	}
 
+	@Override
+	public void executeInstruction() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

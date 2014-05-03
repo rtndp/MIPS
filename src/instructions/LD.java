@@ -38,4 +38,10 @@ public class LD extends Instruction{
 	public String toString() {
 		return "LD" + destinationLabel +" "+immediate+"("+sourceLabel +")";
 	}
+
+	@Override
+	public void executeInstruction() {
+		// TODO Auto-generated method stub
+		
+	}
 }

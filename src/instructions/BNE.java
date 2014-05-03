@@ -45,4 +45,10 @@ public class BNE extends Instruction{
 		return "BNE "+" "+leftLabel+" "+rightLabel+" "+destinationLabel;
 	}
 
+	@Override
+	public void executeInstruction() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

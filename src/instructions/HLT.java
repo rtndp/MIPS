@@ -20,4 +20,10 @@ public class HLT extends Instruction{
 		return "HLT";
 	}
 
+	@Override
+	public void executeInstruction() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

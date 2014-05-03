@@ -38,4 +38,10 @@ public class LW extends Instruction{
 	public String toString() {
 		return "LW" + destinationLabel +" "+immediate+"("+sourceLabel +")";
 	}
+
+	@Override
+	public void executeInstruction() {
+		// TODO Auto-generated method stub
+		
+	}
 }

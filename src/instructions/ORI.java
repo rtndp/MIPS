@@ -40,4 +40,10 @@ public class ORI extends Instruction{
 	public String toString() {
 		return "ORI " + destinationLabel +" "+ sourceLabel +" "+ immediate;
 	}
+
+	@Override
+	public void executeInstruction() {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -47,4 +47,10 @@ public class ANDI extends Instruction{
 	public String toString() {
 		return "ANDI " + destinationLabel +" "+ sourceLabel +" "+ immediate;
 	}
+
+	@Override
+	public void executeInstruction() {
+		// TODO Auto-generated method stub
+		
+	}
 }

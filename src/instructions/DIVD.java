@@ -41,4 +41,10 @@ public class DIVD extends Instruction {
 		return "DIVD " +destinationLabel+" "+sourceLabel1+" "+sourceLabel2;
 	}
 
+	@Override
+	public void executeInstruction() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

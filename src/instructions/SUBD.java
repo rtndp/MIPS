@@ -41,4 +41,10 @@ public class SUBD extends Instruction {
 	public String toString() {
 		return "SUBD " +destinationLabel+" "+sourceLabel1 +" "+sourceLabel2;
 	}
+
+	@Override
+	public void executeInstruction() {
+		// TODO Auto-generated method stub
+		
+	}
 }

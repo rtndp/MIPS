@@ -39,4 +39,10 @@ public class SD extends Instruction{
 		return "SD " + sourceLabel +" "+immediate+"("+destinationLabel+")";
 	}
 
+	@Override
+	public void executeInstruction() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

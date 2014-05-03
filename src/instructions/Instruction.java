@@ -23,5 +23,6 @@ public abstract class Instruction {
 	
 	public abstract List<String> getSourceRegister();
 	public abstract String getDestinationRegister();
+	public abstract void executeInstruction();
 	
 }

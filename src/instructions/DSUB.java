@@ -42,4 +42,10 @@ public class DSUB extends Instruction{
 		return "DSUB " +destinationLabel+" "+sourceLabel1+" "+sourceLabel2;
 	}
 
+	@Override
+	public void executeInstruction() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

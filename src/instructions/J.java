@@ -26,4 +26,10 @@ public class J extends Instruction{
 		return "J " +destinationLabel;
 	}
 
+	@Override
+	public void executeInstruction() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
