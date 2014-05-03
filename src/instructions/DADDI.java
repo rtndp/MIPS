@@ -13,6 +13,15 @@ public class DADDI extends Instruction{
 
 	int immediate;
 	
+	
+	
+	public DADDI(String sourceLabel, String destinationLabel, int immediate) {
+		super();
+		this.sourceLabel = sourceLabel;
+		this.destinationLabel = destinationLabel;
+		this.immediate = immediate;
+	}
+
 	@Override
 	public List<String> getSourceRegister() {
 
