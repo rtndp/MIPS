@@ -1,29 +1,30 @@
 package instructions;
 
-import java.util.List;
+public abstract class Instruction implements InstructionI
+{
+    /* Hazards */
+    public boolean RAW;
+    public boolean WAR;
+    public boolean WAW;
+    public boolean STRUCT;
 
-public abstract class Instruction {
+    public int[]   entryCycle;
+    public int[]   exitCycle;
 
-	/*Hazards*/
-	public boolean RAW;
-	public boolean WAR;
-	public boolean WAW;
-	public boolean STRUCT;
-	
-	public int[] entryCycle = new int[4];
-	public int[] exitCycle = new int[4];
-	
-	public String  printableInstruction;
-	
-	public Instruction() {
-		super();
-		this.RAW = false;
-		this.WAR = false;
-		this.WAW = false;
-		this.STRUCT = false;
-	}
-	
-	public Instruction(Instruction obj)
+    public String  printableInstruction;
+
+    public Instruction()
+    {
+        super();
+        this.entryCycle = new int[4];
+        this.exitCycle = new int[4];
+        this.RAW = false;
+        this.WAR = false;
+        this.WAW = false;
+        this.STRUCT = false;
+    }
+
+    public Instruction(Instruction obj)
     {
         super();
         // System.out.println("Copy Constructor of Instruction SuperClass: "
@@ -45,14 +46,5 @@ public abstract class Instruction {
     {
         this.printableInstruction = str;
     }
-	
-	public abstract List<String> getSourceRegister();
-	public abstract String getDestinationRegister();
-	
-	public abstract void executeInstruction();
-	public abstract void decodeInstruction();
-	
-	
-	public abstract WriteBackObject getWriteBackObject();
-	
+
 }

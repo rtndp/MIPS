@@ -2,36 +2,45 @@ package instructions;
 
 import java.util.List;
 
-public class NOOP extends Instruction{
+public class NOOP extends Instruction
+{
 
-	@Override
-	public List<String> getSourceRegister() {
-		// Do nothing here 
-		return null;
-	}
-
-	@Override
-	public String getDestinationRegister() {
-		// Do nothing here
-		return null;
-	}
-
-	@Override
-	public void executeInstruction() {
-		// Do nothing here
-		
-	}
-
-	@Override
-	public void decodeInstruction() {
-		// Do nothing here
-		
-	}
-
-	@Override
-    public WriteBackObject getWriteBackObject()
+    public NOOP()
     {
+        super();
+    }
+
+    public NOOP(NOOP obj)
+    {
+        super(obj);
+        setPrintableInstruction(obj.printableInstruction);
+    }
+
+    @Override
+    public List<SourceObject> getSourceRegister()
+    {
+        // Do nothing here
         return null;
+    }
+
+    @Override
+    public WriteBackObject getDestinationRegister()
+    {
+        // Do nothing here
+        return null;
+    }
+
+    @Override
+    public void executeInstruction()
+    {
+        // Do nothing here
+
+    }
+
+    @Override
+    public String toString()
+    {
+        return "NOOP";
     }
 
 }

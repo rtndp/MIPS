@@ -1,68 +1,30 @@
 package instructions;
 
-import java.util.ArrayList;
-import java.util.List;
 
-public class ORI extends Instruction{
+public class ORI extends TwoRegImmediateInstruction
+{
 
-	String sourceLabel;
-	String destinationLabel;
-	
-	long source;
-	long destination;
-
-	int immediate;
-	
-	public ORI(String sourceLabel, String destinationLabel, int immediate) {
-		super();
-		this.sourceLabel = sourceLabel;
-		this.destinationLabel = destinationLabel;
-		this.immediate = immediate;
-	}
-
-	@Override
-	public List<String> getSourceRegister() {
-
-		List<String> sourceRegisterList = new ArrayList<String>();
-		sourceRegisterList.add(this.sourceLabel);
-		return sourceRegisterList;
-	
-	}
-
-	@Override
-	public String getDestinationRegister() {
-
-		return destinationLabel;
-	
-	}
-	
-	
-	public int getImmediate(){
-		
-		return this.immediate;
-		
-	}
-	
-	@Override
-	public String toString() {
-		return "ORI " + destinationLabel +" "+ sourceLabel +" "+ immediate;
-	}
-
-	@Override
-	public void executeInstruction() {
-
-		destination = source | immediate;
-	}
-
-	@Override
-	public void decodeInstruction() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-    public WriteBackObject getWriteBackObject()
+    public ORI(String sourceLabel, String destinationLabel, int immediate)
     {
-        return null;
+        super(sourceLabel, destinationLabel, immediate);
     }
+
+    public ORI(ORI obj)
+    {
+        super(obj);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "ORI " + dest.getDestinationLabel() + ", "
+                + src1.getSourceLabel() + ", " + immediate;
+    }
+
+    @Override
+    public void executeInstruction()
+    {
+        dest.setDestination(src1.getSource() | immediate);
+    }
+
 }
