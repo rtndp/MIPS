@@ -48,6 +48,4 @@ public abstract class FUNCTIONALUNIT {
 	public abstract void addInstructionToQueue(Instruction instruction);
 	public abstract Instruction removeInstructionFromQueue();
 	
-	
-
 }
