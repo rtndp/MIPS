@@ -15,5 +15,11 @@ public class WRITEBACK extends FUNCTIONALUNIT {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
+	//This method will be invoked by the WRITEBACK stage
+	public void writeBack(){
+		
+	}
 
 }

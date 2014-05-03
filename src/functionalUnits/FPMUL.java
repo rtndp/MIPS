@@ -16,4 +16,7 @@ public class FPMUL extends FUNCTIONALUNIT {
 		return null;
 	}
 
+	public void fpmul(){
+		
+	}
 }

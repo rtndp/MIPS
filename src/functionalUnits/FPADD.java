@@ -16,5 +16,9 @@ public class FPADD extends FUNCTIONALUNIT {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+public void fpadd(){
+		
+	}
 
 }

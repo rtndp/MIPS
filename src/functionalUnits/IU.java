@@ -15,5 +15,9 @@ public class IU extends FUNCTIONALUNIT {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public void iu(){
+		
+	}
 
 }

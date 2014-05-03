@@ -6,14 +6,27 @@ public class FETCH extends FUNCTIONALUNIT {
 
 	@Override
 	public void addInstructionToQueue(Instruction instruction) {
-		// TODO Auto-generated method stub
-		
+			
 	}
 
 	@Override
 	public Instruction removeInstructionFromQueue() {
-		// TODO Auto-generated method stub
+		
 		return null;
+	}
+	
+	private void process(){
+		
+	}
+	
+	private void enqueueInstruction(){
+		
+	}
+	
+	public void fetch(){
+		//Called by fetch stage
+		process();
+		enqueueInstruction();
 	}
 
 }

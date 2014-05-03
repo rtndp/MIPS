@@ -16,4 +16,8 @@ public class MEM extends FUNCTIONALUNIT {
 		return null;
 	}
 
+	public void mem(){
+		
+	}
+	
 }
