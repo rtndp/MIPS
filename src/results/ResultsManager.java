@@ -1,13 +1,11 @@
 package results;
 
 import instructions.Instruction;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.TreeMap;
-
 import program.ProgramManager;
 
 public class ResultsManager
