@@ -6,31 +6,31 @@ public class NOOP extends Instruction{
 
 	@Override
 	public List<String> getSourceRegister() {
-		// TODO Auto-generated method stub
+		// Do nothing here 
 		return null;
 	}
 
 	@Override
 	public String getDestinationRegister() {
-		// TODO Auto-generated method stub
+		// Do nothing here
 		return null;
 	}
 
 	@Override
 	public void executeInstruction() {
-		// TODO Auto-generated method stub
+		// Do nothing here
 		
 	}
 
 	@Override
 	public void decodeInstruction() {
-		// TODO Auto-generated method stub
+		// Do nothing here
 		
 	}
 
 	@Override
 	public void writeBackResult() {
-		// TODO Auto-generated method stub
+		// Do nothing here
 		
 	}
 
