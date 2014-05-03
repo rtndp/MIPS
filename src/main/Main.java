@@ -1,40 +1,65 @@
 package main;
 
 import memory.DataMemoryFileParser;
-import stages.CPU;
 import program.ProgramParser;
 import registers.RegisterFileParser;
-import results.ResultsManager;
+import stages.CPU;
+import stages.DECODE;
+import stages.EX;
+import stages.FETCH;
+import stages.WRITEBACK;
 import config.ConfigParser;
 
-public class Main
-{
-    public static void main(String[] args) throws Exception
-    {
-        for (int i = 0; i < args.length; i++)
-            System.out.print(args[i] + " ");
-        System.out.println();
 
-        ProgramParser.parse(args[0]);
+public class Main {
+	public static void main(String[] args) throws Exception {
+		for (int i = 0; i < args.length; i++)
+			System.out.print(args[i] + " ");
+		System.out.println();
 
-        DataMemoryFileParser.parseMemoryFile(args[1]);
+		ProgramParser.parse(args[0]);
 
-        RegisterFileParser.parseRegister(args[2]);
+		DataMemoryFileParser.parseMemoryFile(args[1]);
 
-        ConfigParser.parseConfigFile(args[3]);
+		RegisterFileParser.parseRegister(args[2]);
 
-        CPU.CLOCK = 0;
-        CPU.PROGRAM_COUNTER = 0;
+		ConfigParser.parseConfigFile(args[3]);
+		/*ConfigManager.instance.dumpConfiguration();*/
+		
 
-        while (CPU.CLOCK < 100)
-        {
+		CPU.CLOCK = 0;
+		CPU.PROGRAM_COUNTER = 0;
 
-            CPU.CLOCK++;
+		FETCH fetch = FETCH.getInstance();
+		DECODE decode = DECODE.getInstance();
+		EX ex = EX.getInstance();
+		WRITEBACK writeBack = WRITEBACK.getInstance();
+		
+		fetch.execute();
+		decode.execute();
+		ex.execute();
+		writeBack.execute();
+		
+		/*DECODE decode = DECODE.getInstance();
+		EX ex = EX.getInstance();
+		WRITEBACK writeBack = WRITEBACK.getInstance();*/
 
-            CPU.PROGRAM_COUNTER++;
-        }
+		while (CPU.CLOCK < 100) {
 
-        ResultsManager.instance.testPrintWithDummyData();
+			CPU.CLOCK++;
 
-    }
+			/*// Writeback
+			writeBack.execute();
+			// Execute
+			ex.execute();
+			// Decode
+			decode.execute();
+			// Fetch
+			fetch.execute();*/
+
+		}
+
+		//ResultsManager.instance.testPrintWithDummyData();
+
+	}
 }
