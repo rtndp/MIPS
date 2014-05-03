@@ -33,9 +33,9 @@ public class HLT extends Instruction{
 	}
 
 	@Override
-	public void writeBackResult() {
-		// TODO Auto-generated method stub
-		
-	}
+    public WriteBackObject getWriteBackObject()
+    {
+        return null;
+    }
 
 }

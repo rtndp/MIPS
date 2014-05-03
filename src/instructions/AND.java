@@ -52,8 +52,9 @@ public class AND extends Instruction{
 	}
 
 	@Override
-	public void writeBackResult() {
-		
-	}
+    public WriteBackObject getWriteBackObject()
+    {
+        return new WriteBackObject(destinationLabel, destination);
+    }
 
 }

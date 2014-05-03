@@ -55,9 +55,9 @@ public class MULD extends Instruction{
 	}
 
 	@Override
-	public void writeBackResult() {
-		// TODO Auto-generated method stub
-		
-	}
+    public WriteBackObject getWriteBackObject()
+    {
+        return new WriteBackObject(destinationLabel, destination);
+    }
 
 }

@@ -1,5 +1,7 @@
 package instructions;
 
+import instructions.WriteBackObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,10 +54,12 @@ public class ADDD extends Instruction{
 		
 	}
 
+
 	@Override
-	public void writeBackResult() {
-		
-	}
+    public WriteBackObject getWriteBackObject()
+    {
+        return new WriteBackObject(destinationLabel, destination);
+    }
 	
 	
 }

@@ -29,9 +29,9 @@ public class NOOP extends Instruction{
 	}
 
 	@Override
-	public void writeBackResult() {
-		// Do nothing here
-		
-	}
+    public WriteBackObject getWriteBackObject()
+    {
+        return null;
+    }
 
 }

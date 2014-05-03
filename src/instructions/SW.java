@@ -51,8 +51,9 @@ public class SW extends Instruction{
 	}
 
 	@Override
-	public void writeBackResult() {
-		
-	}
+    public WriteBackObject getWriteBackObject()
+    {
+        return new WriteBackObject(destinationLabel, destination);
+    }
 
 }

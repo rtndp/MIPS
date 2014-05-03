@@ -1,7 +1,5 @@
 package instructions;
 
-import instructions.Instruction;
-
 import java.util.List;
 
 public abstract class Instruction {
@@ -53,6 +51,8 @@ public abstract class Instruction {
 	
 	public abstract void executeInstruction();
 	public abstract void decodeInstruction();
-	public abstract void writeBackResult();
+	
+	
+	public abstract WriteBackObject getWriteBackObject();
 	
 }
