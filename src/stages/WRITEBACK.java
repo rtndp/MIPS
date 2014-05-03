@@ -1,9 +1,10 @@
 package stages;
 
-public class WB extends STAGE {
+public class WRITEBACK extends STAGE {
 
 	@Override
 	public void execute() {
+		
 		
 	}
 
