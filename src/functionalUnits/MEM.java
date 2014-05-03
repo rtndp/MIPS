@@ -1,5 +1,5 @@
 package functionalUnits;
 
-public class MEM extends FunctionUnit {
+public class MEM extends FUNCTIONALUNIT {
 
 }

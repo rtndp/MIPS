@@ -1,5 +1,5 @@
 package functionalUnits;
 
-public class DECODE extends FunctionUnit {
+public class DECODE extends FUNCTIONALUNIT {
 
 }

@@ -1,5 +1,5 @@
 package functionalUnits;
 
-public class FPMUL extends FunctionUnit {
+public class FPMUL extends FUNCTIONALUNIT {
 
 }

@@ -1,5 +1,5 @@
 package functionalUnits;
 
-public class IU extends FunctionUnit {
+public class IU extends FUNCTIONALUNIT {
 
 }

@@ -1,5 +1,5 @@
 package functionalUnits;
 
-public class FETCH extends FunctionUnit {
+public class FETCH extends FUNCTIONALUNIT {
 
 }

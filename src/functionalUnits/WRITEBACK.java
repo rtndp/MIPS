@@ -1,5 +1,5 @@
 package functionalUnits;
 
-public class WRITEBACK extends FunctionUnit {
+public class WRITEBACK extends FUNCTIONALUNIT {
 
 }

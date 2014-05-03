@@ -1,6 +1,6 @@
 package functionalUnits;
 
 
-public class FPADD extends FunctionUnit {
+public class FPADD extends FUNCTIONALUNIT {
 
 }

@@ -1,5 +1,5 @@
 package functionalUnits;
 
-public class FPDIV extends FunctionUnit {
+public class FPDIV extends FUNCTIONALUNIT {
 
 }
