@@ -13,6 +13,14 @@ public class DSUBI extends Instruction{
 
 	int immediate;
 	
+	
+	public DSUBI(String sourceLabel, String destinationLabel, int immediate) {
+		super();
+		this.sourceLabel = sourceLabel;
+		this.destinationLabel = destinationLabel;
+		this.immediate = immediate;
+	}
+
 	@Override
 	public List<String> getSourceRegister() {
 

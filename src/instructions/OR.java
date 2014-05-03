@@ -12,6 +12,13 @@ public class OR extends Instruction{
 	long source1;
 	long source2;
 	long destination;
+	
+	public OR(String sourceLabel1, String sourceLabel2, String destinationLabel) {
+		super();
+		this.sourceLabel1 = sourceLabel1;
+		this.sourceLabel2 = sourceLabel2;
+		this.destinationLabel = destinationLabel;
+	}
 
 	@Override
 	public List<String> getSourceRegister() {

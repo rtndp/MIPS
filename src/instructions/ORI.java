@@ -13,6 +13,13 @@ public class ORI extends Instruction{
 
 	int immediate;
 	
+	public ORI(String sourceLabel, String destinationLabel, int immediate) {
+		super();
+		this.sourceLabel = sourceLabel;
+		this.destinationLabel = destinationLabel;
+		this.immediate = immediate;
+	}
+
 	@Override
 	public List<String> getSourceRegister() {
 
