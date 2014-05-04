@@ -42,7 +42,7 @@ public class RegisterManager
         }
     }
 
-    public void setRegisterValue(String label, int val) throws Exception
+    public void setRegisterValue(String label, long val) throws Exception
     {
         label = ValidateRegisterName.getValidRegisterName(label);
         Register<Long> reg = registerMap.get(label);

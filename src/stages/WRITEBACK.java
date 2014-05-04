@@ -1,5 +1,7 @@
 package stages;
 
+import instructions.Instruction;
+
 public class WRITEBACK extends STAGE {
 
 	private static volatile WRITEBACK instance;
@@ -23,11 +25,16 @@ public class WRITEBACK extends STAGE {
 	}
 
 	@Override
-	public void execute() {
+	public void execute() throws Exception {
 		System.out.println("------------------------------");
 		System.out.println("WRITEBACK - ");
 		writeBack.dumpUnitDetails();
-		//writeBack.writeBack();
+		System.out.println("------------------------------");
+
+		writeBack.writeBack();
 	}
 
+	public boolean acceptIntruction(Instruction instruction) {
+		return writeBack.acceptIntruction(instruction);
+	}
 }
