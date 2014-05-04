@@ -56,5 +56,11 @@ public abstract class FUNCTIONALUNIT {
 	public abstract void addInstructionToQueue(Instruction instruction);
 
 	public abstract Instruction removeInstructionFromQueue();
-
+	
+	public boolean validateQueueSize(){
+		if(instructionQueue.size() != pipelineSize)
+			return false;
+		else
+			return true;
+	}
 }
