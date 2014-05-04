@@ -7,6 +7,7 @@ public class AND extends ThreeRegInstruction
     public AND(String sourceLabel1, String sourceLabel2, String destinationLabel)
     {
         super(sourceLabel1, sourceLabel2, destinationLabel);
+        this.functionalUnitType = FunctionalUnitType.IU;
     }
 
     public AND(AND obj)

@@ -7,6 +7,7 @@ public abstract class Instruction implements InstructionI
     public boolean WAR;
     public boolean WAW;
     public boolean STRUCT;
+    public FunctionalUnitType functionalUnitType;
 
     public int[]   entryCycle;
     public int[]   exitCycle;
@@ -22,6 +23,7 @@ public abstract class Instruction implements InstructionI
         this.WAR = false;
         this.WAW = false;
         this.STRUCT = false;
+        this.functionalUnitType = FunctionalUnitType.UNKNOWN;
     }
 
     public Instruction(Instruction obj)
@@ -39,6 +41,7 @@ public abstract class Instruction implements InstructionI
                 this.entryCycle.length);
         System.arraycopy(obj.exitCycle, 0, this.exitCycle, 0,
                 this.exitCycle.length);
+        this.functionalUnitType = obj.functionalUnitType;
     }
 
     // Purely for decorative purposes

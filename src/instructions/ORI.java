@@ -7,6 +7,7 @@ public class ORI extends TwoRegImmediateInstruction
     public ORI(String sourceLabel, String destinationLabel, int immediate)
     {
         super(sourceLabel, destinationLabel, immediate);
+        this.functionalUnitType = FunctionalUnitType.IU;
     }
 
     public ORI(ORI obj)

@@ -6,6 +6,7 @@ public class SW extends TwoRegImmediateInstruction
     public SW(String sourceLabel, String destinationLabel, int immediate)
     {
         super(sourceLabel, destinationLabel, immediate);
+        this.functionalUnitType = FunctionalUnitType.IU;
     }
 
     public SW(SW obj)

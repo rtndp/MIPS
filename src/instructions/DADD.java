@@ -7,6 +7,7 @@ public class DADD extends ThreeRegInstruction
             String destinationLabel)
     {
         super(sourceLabel1, sourceLabel2, destinationLabel);
+        this.functionalUnitType = FunctionalUnitType.IU;
     }
 
     public DADD(DADD obj)

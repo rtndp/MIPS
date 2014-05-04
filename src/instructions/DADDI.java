@@ -6,6 +6,7 @@ public class DADDI extends TwoRegImmediateInstruction
     public DADDI(String sourceLabel, String destinationLabel, int immediate)
     {
         super(sourceLabel, destinationLabel, immediate);
+        this.functionalUnitType = FunctionalUnitType.IU;
     }
 
     public DADDI(DADDI obj)

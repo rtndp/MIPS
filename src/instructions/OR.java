@@ -5,6 +5,7 @@ public class OR extends ThreeRegInstruction
     public OR(String sourceLabel1, String sourceLabel2, String destinationLabel)
     {
         super(sourceLabel1, sourceLabel2, destinationLabel);
+        this.functionalUnitType = FunctionalUnitType.IU;
     }
 
     public OR(OR obj)

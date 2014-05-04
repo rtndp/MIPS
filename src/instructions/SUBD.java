@@ -7,6 +7,7 @@ public class SUBD extends ThreeRegInstruction
             String destinationLabel)
     {
         super(sourceLabel1, sourceLabel2, destinationLabel);
+        this.functionalUnitType = FunctionalUnitType.FPADD;
     }
 
     public SUBD(SUBD obj)

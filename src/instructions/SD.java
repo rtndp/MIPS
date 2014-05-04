@@ -7,6 +7,7 @@ public class SD extends TwoRegImmediateInstruction
     public SD(String sourceLabel, String destinationLabel, int immediate)
     {
         super(sourceLabel, destinationLabel, immediate);
+        this.functionalUnitType = FunctionalUnitType.IU;
     }
 
     public SD(SD obj)
