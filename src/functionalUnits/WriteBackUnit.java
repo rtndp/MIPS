@@ -10,39 +10,33 @@ import registers.RegisterManager;
 import results.ResultsManager;
 import stages.CPU;
 
-public class WRITEBACK extends FUNCTIONALUNIT {
+public class WriteBackUnit extends FunctionalUnit {
 
-	private static volatile WRITEBACK instance;
+	private static volatile WriteBackUnit instance;
 
-	public static WRITEBACK getInstance() {
+	public static WriteBackUnit getInstance() {
 		if (null == instance)
-			synchronized (WRITEBACK.class) {
+			synchronized (WriteBackUnit.class) {
 				if (null == instance)
-					instance = new WRITEBACK();
+					instance = new WriteBackUnit();
 			}
 
 		return instance;
 	}
 
-	private WRITEBACK() {
+	private WriteBackUnit() {
 		super();
-		this.setPipelined(false);
-		this.setClockCyclesRequired(1);
-		this.setAvailable(true);
-		this.setPipelineSize(1);
+		this.isPipelined = false;
+		this.clockCyclesRequired = 1;
+		this.pipelineSize = 1;
 		this.instructionQueue = new ArrayDeque<Instruction>();
 		this.instructionQueue.add(new NOOP());
 
-	}
-
-	@Override
-	public void addInstructionToQueue(Instruction instruction) {
-		// This instruction will do nothing in the WRITEBACK stage
+		this.stageId = 3;
 
 	}
 
-	@Override
-	public Instruction removeInstructionFromQueue() {
+	private Instruction peekInstructionFromQueue() {
 		//
 		System.out.println("WRITEBACK Instruction Queue Size - "
 				+ instructionQueue.size());
@@ -55,12 +49,12 @@ public class WRITEBACK extends FUNCTIONALUNIT {
 		return inst;
 	}
 
-	// This method will be invoked by the WRITEBACK stage
-	public void writeBack() throws Exception {
+	@Override
+	public void executeUnit() throws Exception {
 		// Remove instruction from the queue if it is not a NOOP
 
 		// Check if an instruction other than NOOP is in its Queue
-		Instruction inst = removeInstructionFromQueue();
+		Instruction inst = peekInstructionFromQueue();
 		if (inst == null)
 			return;
 
@@ -84,26 +78,14 @@ public class WRITEBACK extends FUNCTIONALUNIT {
 
 		instructionQueue.remove();
 		instructionQueue.add(new NOOP());
-
 	}
 
-	public void dumpUnitDetails() {
-		System.out.println("isPipelined - " + instance.isPipelined());
-		System.out.println("isAvailable - " + instance.isAvailable());
-		System.out.println("Pipeline Size - " + instance.getPipelineSize());
-		System.out.println("Clock Cycles required - "
-				+ instance.getClockCyclesRequired());
-	}
-
-	public boolean acceptIntruction(Instruction instruction) {
-
-		if (!(instructionQueue.peekFirst() instanceof NOOP))
-			System.out
-					.println("WRITEBACK FPU Found a Real Instruction while offering a instruction: "
-							+ instruction.printableInstruction);
-
-		instructionQueue.addFirst(instruction);
-		return true;
-	}
-
+	/*
+	 * public void dumpUnitDetails() { System.out.println("isPipelined - " +
+	 * instance.isPipelined()); System.out.println("isAvailable - " +
+	 * instance.isAvailable()); System.out.println("Pipeline Size - " +
+	 * instance.getPipelineSize());
+	 * System.out.println("Clock Cycles required - " +
+	 * instance.getClockCyclesRequired()); }
+	 */
 }
