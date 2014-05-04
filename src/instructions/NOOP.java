@@ -8,6 +8,7 @@ public class NOOP extends Instruction
     public NOOP()
     {
         super();
+        this.instructionType = InstructionType.NOOP;
     }
 
     public NOOP(NOOP obj)

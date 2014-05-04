@@ -41,6 +41,12 @@ public class FpDivUnit extends FunctionalUnit {
 		// TODO Auto-generated method stub
 
 	}
+	
+	@Override
+	public int getClockCyclesRequiredForNonPipeLinedUnit() {
+		// TODO Auto-generated method stub
+		return clockCyclesRequired;
+	}
 
 	/*
 	 * public void dumpUnitDetails(){

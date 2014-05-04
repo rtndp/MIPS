@@ -7,6 +7,7 @@ public class DADDI extends TwoRegImmediateInstruction
     {
         super(sourceLabel, destinationLabel, immediate);
         this.functionalUnitType = FunctionalUnitType.IU;
+        this.instructionType = InstructionType.ARITHMETIC_IMM;
     }
 
     public DADDI(DADDI obj)

@@ -48,6 +48,12 @@ public class FetchUnit extends FunctionalUnit {
 		enqueueInstruction();
 
 	}
+	
+	@Override
+	public int getClockCyclesRequiredForNonPipeLinedUnit() {
+		// TODO Auto-generated method stub
+		return clockCyclesRequired;
+	}
 
 	/*
 	 * public void dumpUnitDetails(){

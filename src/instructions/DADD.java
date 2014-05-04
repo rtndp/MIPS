@@ -8,6 +8,7 @@ public class DADD extends ThreeRegInstruction
     {
         super(sourceLabel1, sourceLabel2, destinationLabel);
         this.functionalUnitType = FunctionalUnitType.IU;
+        this.instructionType = InstructionType.ARITHMETIC_REG;
     }
 
     public DADD(DADD obj)

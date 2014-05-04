@@ -7,6 +7,7 @@ public class BNE extends ConditionalBranchInstruction
     public BNE(String sourceLabel1, String sourceLabel2, String destinationLabel)
     {
         super(sourceLabel1, sourceLabel2, destinationLabel);
+        this.instructionType = InstructionType.BRANCH;
     }
 
     public BNE(BNE obj)

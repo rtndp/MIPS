@@ -9,13 +9,16 @@ import stages.CPU;
 
 public abstract class FunctionalUnit {
 
-	boolean isPipelined;
-	int clockCyclesRequired;
-	int pipelineSize;
-	int stageId;
-	Deque<Instruction> instructionQueue;
+	public boolean isPipelined;
+	public int clockCyclesRequired;
+	public int pipelineSize;
+	public int stageId;
+	public Deque<Instruction> instructionQueue;
 
 	public abstract void executeUnit() throws Exception;
+
+	public abstract int getClockCyclesRequiredForNonPipeLinedUnit()
+			throws Exception;
 
 	// TODO: Increment entry cycle and exit cycle clock depending on stage
 	// number
@@ -33,8 +36,8 @@ public abstract class FunctionalUnit {
 			instruction.exitCycle[this.stageId - 1] = CPU.CLOCK;
 
 		// This is hack for IU to MEM
-		if (instruction.entryCycle[this.stageId] == 0)
-			instruction.entryCycle[this.stageId] = CPU.CLOCK;
+		/* if (instruction.entryCycle[this.stageId] == 0) - Removed */
+		instruction.entryCycle[this.stageId] = CPU.CLOCK;
 
 	}
 
@@ -47,8 +50,23 @@ public abstract class FunctionalUnit {
 	// This is being done for the execute stage functional units.
 	public boolean checkIfFree(Instruction instruction) throws Exception {
 		validateQueueSize();
-
 		return (instructionQueue.peekFirst() instanceof NOOP) ? true : false;
 
+	}
+
+	public boolean isReadyToSend() throws Exception {
+		if (isPipelined) {
+			if (instructionQueue.peekLast() instanceof NOOP) {
+				return true;
+			}
+		} else {
+			if (instructionQueue.peekLast() instanceof NOOP
+					&& CPU.CLOCK
+							- instructionQueue.peekLast().entryCycle[stageId] >= getClockCyclesRequiredForNonPipeLinedUnit()) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

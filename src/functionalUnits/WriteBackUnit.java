@@ -80,6 +80,11 @@ public class WriteBackUnit extends FunctionalUnit {
 		instructionQueue.add(new NOOP());
 	}
 
+	@Override
+	public int getClockCyclesRequiredForNonPipeLinedUnit() {
+		// TODO Auto-generated method stub
+		return clockCyclesRequired;
+	}
 	/*
 	 * public void dumpUnitDetails() { System.out.println("isPipelined - " +
 	 * instance.isPipelined()); System.out.println("isAvailable - " +

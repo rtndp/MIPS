@@ -43,6 +43,12 @@ public class FpAddUnit extends FunctionalUnit {
 
 	}
 
+	@Override
+	public int getClockCyclesRequiredForNonPipeLinedUnit() {
+		// TODO Auto-generated method stub
+		return clockCyclesRequired;
+	}
+
 	/*
 	 * public void dumpUnitDetails() { System.out.println("isPipelined - " +
 	 * instance.isPipelined()); System.out.println("isAvailable - " +

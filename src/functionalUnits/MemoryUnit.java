@@ -1,10 +1,16 @@
 package functionalUnits;
 
+import instructions.Instruction;
+import instructions.InstructionType;
+import instructions.LD;
+import instructions.LW;
+import instructions.NOOP;
+import instructions.SD;
+import instructions.SW;
+
 import java.util.ArrayDeque;
 
 import config.ConfigManager;
-import instructions.Instruction;
-import instructions.NOOP;
 
 public class MemoryUnit extends FunctionalUnit {
 
@@ -39,6 +45,20 @@ public class MemoryUnit extends FunctionalUnit {
 
 	}
 
+	@Override
+	public int getClockCyclesRequiredForNonPipeLinedUnit() throws Exception {
+		// TODO Auto-generated method stub
+		Instruction inst = instructionQueue.peekLast();
+		if (inst.instructionType.equals(InstructionType.MEMORY_FPREG)
+				|| inst.instructionType.equals(InstructionType.MEMORY_REG))
+			return clockCyclesRequired;
+		else if (inst.instructionType.equals(InstructionType.ARITHMETIC_REG)
+				|| inst.instructionType.equals(InstructionType.ARITHMETIC_IMM))
+			return 1;
+
+		throw new Exception("MemoryUnit: Illegal instruction in Memory Unit: "
+				+ inst.toString());
+	}
 	/*
 	 * public void dumpUnitDetails(){
 	 * System.out.println("isPipelined - "+instance.isPipelined());

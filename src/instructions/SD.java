@@ -8,6 +8,7 @@ public class SD extends TwoRegImmediateInstruction
     {
         super(sourceLabel, destinationLabel, immediate);
         this.functionalUnitType = FunctionalUnitType.IU;
+        this.instructionType = InstructionType.MEMORY_FPREG;
     }
 
     public SD(SD obj)

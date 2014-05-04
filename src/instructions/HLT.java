@@ -7,6 +7,7 @@ public class HLT extends Instruction
     public HLT()
     {
         super();
+        this.instructionType = InstructionType.HALT;
     }
 
     public HLT(HLT obj)

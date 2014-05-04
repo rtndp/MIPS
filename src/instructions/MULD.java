@@ -8,6 +8,7 @@ public class MULD extends ThreeRegInstruction
     {
         super(sourceLabel1, sourceLabel2, destinationLabel);
         this.functionalUnitType = FunctionalUnitType.FPMUL;
+        this.instructionType = InstructionType.ARITHMETIC_FPREG;
     }
 
     public MULD(MULD obj)

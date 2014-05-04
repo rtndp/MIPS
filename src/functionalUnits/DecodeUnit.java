@@ -97,7 +97,12 @@ public class DecodeUnit extends FunctionalUnit {
 		isFunctionalUnitFree();
 
 	}
-
+	
+	@Override
+	public int getClockCyclesRequiredForNonPipeLinedUnit() {
+		// TODO Auto-generated method stub
+		return clockCyclesRequired;
+	}
 	/*public void dumpUnitDetails() {
 		System.out.println("isPipelined - " + instance.isPipelined());
 		System.out.println("isAvailable - " + instance.isAvailable());
