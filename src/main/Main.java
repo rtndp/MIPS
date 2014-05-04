@@ -1,8 +1,5 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import instructions.Instruction;
 import memory.DataMemoryFileParser;
 import program.ProgramManager;
@@ -11,16 +8,9 @@ import registers.RegisterFileParser;
 import registers.RegisterManager;
 import results.ResultsManager;
 import stages.CPU;
-import stages.DecodeStage;
 import stages.ExStage;
-import stages.FetchStage;
 import stages.WriteBackStage;
 import config.ConfigParser;
-import functionalUnits.FpAddUnit;
-import functionalUnits.FpDivUnit;
-import functionalUnits.FpMulUnit;
-import functionalUnits.FunctionalUnit;
-import functionalUnits.MemoryUnit;
 
 public class Main {
 	public static void main(String[] args) throws Exception {
