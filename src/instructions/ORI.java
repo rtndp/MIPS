@@ -1,6 +1,5 @@
 package instructions;
 
-
 public class ORI extends TwoRegImmediateInstruction
 {
 

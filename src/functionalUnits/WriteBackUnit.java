@@ -9,88 +9,75 @@ import java.util.ArrayDeque;
 import registers.RegisterManager;
 import results.ResultsManager;
 import stages.CPU;
+import stages.StageType;
 
-public class WriteBackUnit extends FunctionalUnit {
+public class WriteBackUnit extends FunctionalUnit
+{
 
-	private static volatile WriteBackUnit instance;
+    private static volatile WriteBackUnit instance;
 
-	public static WriteBackUnit getInstance() {
-		if (null == instance)
-			synchronized (WriteBackUnit.class) {
-				if (null == instance)
-					instance = new WriteBackUnit();
-			}
+    public static WriteBackUnit getInstance()
+    {
+        if (null == instance)
+            synchronized (WriteBackUnit.class)
+            {
+                if (null == instance)
+                    instance = new WriteBackUnit();
+            }
 
-		return instance;
-	}
+        return instance;
+    }
 
-	private WriteBackUnit() {
-		super();
-		this.isPipelined = false;
-		this.clockCyclesRequired = 1;
-		this.pipelineSize = 1;
-		this.instructionQueue = new ArrayDeque<Instruction>();
-		this.instructionQueue.add(new NOOP());
+    private WriteBackUnit()
+    {
+        super();
+        this.isPipelined = false;
+        this.clockCyclesRequired = 1;
+        this.pipelineSize = 1;
+        this.instructionQueue = new ArrayDeque<Instruction>();
+        this.instructionQueue.add(new NOOP());
 
-		this.stageId = 3;
+        this.stageId = StageType.WBSTAGE;
 
-	}
+    }
 
-	private Instruction peekInstructionFromQueue() {
-		//
-		System.out.println("WRITEBACK Instruction Queue Size - "
-				+ instructionQueue.size());
-		Instruction inst = instructionQueue.peek();
-		if (inst instanceof NOOP)
-			return null;
+    @Override
+    public void executeUnit() throws Exception
+    {
+        Instruction inst = instructionQueue.peekLast();
 
-		System.out.println("WRITEBACK Valid instruction found in Queue");
+        if (inst instanceof NOOP)
+            return;
 
-		return inst;
-	}
+        System.out.println(CPU.CLOCK + " WBUnit " + inst.debugString());
 
-	@Override
-	public void executeUnit() throws Exception {
-		// Remove instruction from the queue if it is not a NOOP
+        // Write back the data to the destination register if any and unlock
+        // destination register as Free
+        WriteBackObject writeBackObject = inst.getDestinationRegister();
 
-		// Check if an instruction other than NOOP is in its Queue
-		Instruction inst = peekInstructionFromQueue();
-		if (inst == null)
-			return;
+        if (writeBackObject != null)
+        {
+            RegisterManager.instance.setRegisterValue(
+                    writeBackObject.getDestinationLabel(),
+                    writeBackObject.getDestination());
+            RegisterManager.instance.setRegisterFree(writeBackObject
+                    .getDestinationLabel());
+        }
 
-		// Write back the data to the destination register if any and unlock
-		// destination register as Free
-		WriteBackObject writeBackObject = inst.getDestinationRegister();
+        // Update the exit cycle in the instruction and pass it on to the result
+        updateExitClockCycle(inst);
+        // manager for printing
+        ResultsManager.instance.addInstruction(inst);
 
-		if (writeBackObject != null) {
-			RegisterManager.instance.setRegisterValue(
-					writeBackObject.getDestinationLabel(),
-					writeBackObject.getDestination());
-			RegisterManager.instance.setRegisterFree(writeBackObject
-					.getDestinationLabel());
-		}
-		// Update the exit cycle in the instruction and pass it on to the result
-		// manager for printing
-		// Remove the instruction from the queue and enqueue a NOOP
+        // Remove the instruction from the queue and enqueue a NOOP
+        instructionQueue.remove();
+        instructionQueue.add(new NOOP());
+    }
 
-		inst.exitCycle[3] = CPU.CLOCK;
-		ResultsManager.instance.addInstruction(inst);
-
-		instructionQueue.remove();
-		instructionQueue.add(new NOOP());
-	}
-
-	@Override
-	public int getClockCyclesRequiredForNonPipeLinedUnit() {
-		// TODO Auto-generated method stub
-		return clockCyclesRequired;
-	}
-	/*
-	 * public void dumpUnitDetails() { System.out.println("isPipelined - " +
-	 * instance.isPipelined()); System.out.println("isAvailable - " +
-	 * instance.isAvailable()); System.out.println("Pipeline Size - " +
-	 * instance.getPipelineSize());
-	 * System.out.println("Clock Cycles required - " +
-	 * instance.getClockCyclesRequired()); }
-	 */
+    @Override
+    public int getClockCyclesRequiredForNonPipeLinedUnit()
+    {
+        // TODO Auto-generated method stub
+        return clockCyclesRequired;
+    }
 }

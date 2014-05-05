@@ -49,4 +49,9 @@ public abstract class ConditionalBranchInstruction extends Instruction
     {
         return destinationLabel;
     }
+
+    public boolean compareRegisters()
+    {
+        return (src1.getSource() == src2.getSource());
+    }
 }

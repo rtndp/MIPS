@@ -1,6 +1,5 @@
 package instructions;
 
-
 public class DSUBI extends TwoRegImmediateInstruction
 {
 

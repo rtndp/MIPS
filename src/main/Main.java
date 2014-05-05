@@ -2,88 +2,124 @@ package main;
 
 import instructions.Instruction;
 import memory.DataMemoryFileParser;
+import memory.DataMemoryManager;
 import program.ProgramManager;
 import program.ProgramParser;
 import registers.RegisterFileParser;
 import registers.RegisterManager;
 import results.ResultsManager;
 import stages.CPU;
+import stages.CPU.RUN;
+import stages.DecodeStage;
 import stages.ExStage;
+import stages.FetchStage;
 import stages.WriteBackStage;
+import config.ConfigManager;
 import config.ConfigParser;
 
-public class Main {
-	public static void main(String[] args) throws Exception {
-		for (int i = 0; i < args.length; i++)
-			System.out.print(args[i] + " ");
-		System.out.println();
+public class Main
+{
+    /**
+     * 
+     * @param args
+     *            inst.txt data.txt reg.txt config.txt result.txt
+     * @throws Exception
+     */
+    public static void main(String[] args) throws Exception
+    {
 
-		ProgramParser.parse(args[0]);
+        ProgramParser.parse(args[0]);
+        ProgramManager.instance.dumpProgram();
 
-		DataMemoryFileParser.parseMemoryFile(args[1]);
+        DataMemoryFileParser.parseMemoryFile(args[1]);
+        DataMemoryManager.instance.dumpAllMemory();
 
-		RegisterFileParser.parseRegister(args[2]);
+        RegisterFileParser.parseRegister(args[2]);
+        RegisterManager.instance.dumpAllRegisters();
 
-		ConfigParser.parseConfigFile(args[3]);
-		/* ConfigManager.instance.dumpConfiguration(); */
+        ConfigParser.parseConfigFile(args[3]);
+        ConfigManager.instance.dumpConfiguration();
 
-		CPU.CLOCK = 0;
-		CPU.PROGRAM_COUNTER = 0;
+        ResultsManager.instance.setResultsPath(args[4]);
 
-		/*
-		 * FETCH fetch = FETCH.getInstance(); DECODE decode =
-		 * DECODE.getInstance(); EX ex = EX.getInstance();
-		 */
-		WriteBackStage writeBack = WriteBackStage.getInstance();
-		ExStage ex = ExStage.getInstance();
+        /**
+         * Initialize Global CLOCK and PC to 0
+         */
+        CPU.CLOCK = 0;
+        CPU.PROGRAM_COUNTER = 0;
+        CPU.RUN_TYPE = RUN.PIPELINE;
 
-		/*
-		 * fetch.execute(); decode.execute(); ex.execute(); writeBack.execute();
-		 */
+        WriteBackStage wbStage = WriteBackStage.getInstance();
+        ExStage exStage = ExStage.getInstance();
+        DecodeStage idStage = DecodeStage.getInstance();
+        FetchStage ifStage = FetchStage.getInstance();
 
-		/*
-		 * DECODE decode = DECODE.getInstance(); EX ex = EX.getInstance();
-		 * WRITEBACK writeBack = WRITEBACK.getInstance();
-		 */
+        try
+        {
 
-		while (CPU.CLOCK < 1) {
+            int extraCLKCount = 5000; // Extra number of CLOCK cycles that will
+                                      // be run after HLT is Decoded
+            while (extraCLKCount != 0)
+            {
 
-			CPU.CLOCK++;
-			Instruction test = ProgramManager.instance
-					.getInstructionAtAddress(0);
-			test.entryCycle[0] = 1;
-			test.entryCycle[1] = 2;
-			test.entryCycle[2] = 3;
-			test.entryCycle[3] = 5;
+                wbStage.execute();
+                exStage.execute();
 
-			test.exitCycle[0] = 5;
-			test.exitCycle[1] = 6;
-			test.exitCycle[2] = 7;
-			test.exitCycle[3] = 8;
+                // Well this is just stupid way of doing this
+                if (!ResultsManager.instance.isHALT())
+                {
+                    idStage.execute();
 
-			test.RAW = true;
-			test.getDestinationRegister().setDestination(1000);
+                    if (!ResultsManager.instance.isHALT())
+                    {
+                        ifStage.execute();
 
-			writeBack.acceptInstruction(test);
-			writeBack.execute();
+                        // fetch a new instruction only if ifStage is free
+                        if (ifStage.checkIfFree())
+                        {
+                            boolean checkInst = false;
 
-			System.out.println(RegisterManager.instance.getRegisterValue(test
-					.getDestinationRegister().getDestinationLabel()));
-			
-			//ex.execute();
-			/*
-			 * // Writeback
-			 * 
-			 * // Execute ex.execute(); // Decode decode.execute(); // Fetch
-			 * fetch.execute();
-			 */
-			
-					
-			
+                            Instruction next = null;
+                            switch (CPU.RUN_TYPE)
+                            {
+                                case MEMORY:
+                                    break;
 
-		}
+                                case PIPELINE:
+                                    next = ProgramManager.instance
+                                            .getInstructionAtAddress(CPU.PROGRAM_COUNTER);
+                                    checkInst = true;
+                                    break;
+                            }
 
-		ResultsManager.instance.printResults();
+                            if (checkInst && ifStage.checkIfFree()
+                                    && ifStage.acceptInstruction(next))
+                            {
+                                // update entry clock?
+                                CPU.PROGRAM_COUNTER++;
+                            }
 
-	}
+                        } // end ifStage.checkIfFree
+                    }
+                }
+                else
+                    extraCLKCount--;
+
+                CPU.CLOCK++;
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("ERROR: CLOCK=" + CPU.CLOCK);
+            e.printStackTrace();
+        }
+        finally
+        {
+        }
+        Thread.sleep(1000L);
+        System.out.println("Results");
+        ResultsManager.instance.printResults();
+        ResultsManager.instance.writeResults();
+
+    }
 }

@@ -1,68 +1,101 @@
 package functionalUnits;
 
-import java.util.ArrayDeque;
-
 import instructions.Instruction;
 import instructions.NOOP;
 
-public class FetchUnit extends FunctionalUnit {
+import java.util.ArrayDeque;
 
-	private static volatile FetchUnit instance;
+import results.ResultsManager;
+import stages.CPU;
+import stages.DecodeStage;
+import stages.StageType;
 
-	public static FetchUnit getInstance() {
-		if (null == instance)
-			synchronized (FetchUnit.class) {
-				if (null == instance)
-					instance = new FetchUnit();
-			}
+public class FetchUnit extends FunctionalUnit
+{
 
-		return instance;
-	}
+    private static volatile FetchUnit instance;
 
-	private FetchUnit() {
-		super();
-		this.isPipelined = false;
-		this.clockCyclesRequired = 1;
-		this.pipelineSize = 1;
-		this.stageId = 1;
-		this.instructionQueue = new ArrayDeque<Instruction>();
-		for (int i = 0; i < this.pipelineSize; i++)
-			this.instructionQueue.add(new NOOP());
+    public static FetchUnit getInstance()
+    {
+        if (null == instance)
+            synchronized (FetchUnit.class)
+            {
+                if (null == instance)
+                    instance = new FetchUnit();
+            }
 
-	}
+        return instance;
+    }
 
-	private void process() {
+    private FetchUnit()
+    {
+        super();
+        this.isPipelined = false;
+        this.clockCyclesRequired = 1;
+        this.pipelineSize = 1;
+        this.stageId = StageType.IFSTAGE;
+        this.instructionQueue = new ArrayDeque<Instruction>();
+        for (int i = 0; i < this.pipelineSize; i++)
+            this.instructionQueue.add(new NOOP());
 
-	}
+    }
 
-	private boolean enqueueInstruction() {
+    @Override
+    public int getClockCyclesRequiredForNonPipeLinedUnit()
+    {
+        // TODO Auto-generated method stub
+        return clockCyclesRequired;
+    }
 
-		return false;
-	}
+    @Override
+    public void executeUnit() throws Exception
+    {
 
-	@Override
-	public void executeUnit() {
-		// Called by fetch stage
-		process();
+        validateQueueSize();
 
-		enqueueInstruction();
+        Instruction inst = instructionQueue.peekLast();
 
-	}
-	
-	@Override
-	public int getClockCyclesRequiredForNonPipeLinedUnit() {
-		// TODO Auto-generated method stub
-		return clockCyclesRequired;
-	}
+        if (inst instanceof NOOP)
+            return;
 
-	/*
-	 * public void dumpUnitDetails(){
-	 * System.out.println("isPipelined - "+instance.isPipelined());
-	 * System.out.println("isAvailable - "+instance.isAvailable());
-	 * System.out.println("Pipeline Size - "+instance.getPipelineSize());
-	 * System.
-	 * out.println("Clock Cycles required - "+instance.getClockCyclesRequired
-	 * ()); }
-	 */
+        System.out.println(CPU.CLOCK + " Fetch  " + inst.debugString());
 
+        if (DecodeStage.getInstance().checkIfFree(inst))
+        {
+
+            DecodeStage.getInstance().acceptInstruction(inst);
+            updateExitClockCycle(inst);
+            instructionQueue.removeLast();
+            instructionQueue.add(new NOOP());
+
+        }
+
+        validateQueueSize();
+
+    }
+
+    public void flushUnit() throws Exception
+    {
+        // TODO Auto-generated method stub
+        validateQueueSize();
+
+        Instruction inst = instructionQueue.peekLast();
+
+        System.out.println("FetchUnit flushUnit called for inst: "
+                + inst.debugString());
+
+        if (inst instanceof NOOP)
+            return;
+
+        // update inst exitcycle
+        // updateEntryClockCycle(inst); // hack dont do this!!!
+        updateExitClockCycle(inst);
+        // send to result manager
+        ResultsManager.instance.addInstruction(inst);
+        // remove inst & add NOOP
+        instructionQueue.removeLast();
+        instructionQueue.addFirst(new NOOP());
+
+        validateQueueSize();
+    }
 }

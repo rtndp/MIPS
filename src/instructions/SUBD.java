@@ -1,6 +1,5 @@
 package instructions;
 
-
 public class SUBD extends ThreeRegInstruction
 {
     public SUBD(String sourceLabel1, String sourceLabel2,

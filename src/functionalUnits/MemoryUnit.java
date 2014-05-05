@@ -5,68 +5,118 @@ import instructions.InstructionType;
 import instructions.LD;
 import instructions.LW;
 import instructions.NOOP;
-import instructions.SD;
-import instructions.SW;
+import instructions.StoreInstruction;
 
 import java.util.ArrayDeque;
 
+import memory.DataMemoryManager;
+import stages.CPU;
+import stages.StageType;
+import stages.WriteBackStage;
 import config.ConfigManager;
 
-public class MemoryUnit extends FunctionalUnit {
+public class MemoryUnit extends FunctionalUnit
+{
 
-	private static volatile MemoryUnit instance;
+    private static volatile MemoryUnit instance;
 
-	public static MemoryUnit getInstance() {
-		if (null == instance)
-			synchronized (MemoryUnit.class) {
-				if (null == instance)
-					instance = new MemoryUnit();
-			}
+    public static MemoryUnit getInstance()
+    {
+        if (null == instance)
+            synchronized (MemoryUnit.class)
+            {
+                if (null == instance)
+                    instance = new MemoryUnit();
+            }
 
-		return instance;
-	}
+        return instance;
+    }
 
-	private MemoryUnit() {
-		super();
-		this.isPipelined = false;
-		this.clockCyclesRequired = ConfigManager.instance.MemoryLatency;
-		this.pipelineSize = 1;
+    private MemoryUnit()
+    {
+        super();
+        this.isPipelined = false;
+        this.clockCyclesRequired = ConfigManager.instance.MemoryLatency;
+        this.pipelineSize = 1;
 
-		this.instructionQueue = new ArrayDeque<Instruction>();
-		for (int i = 0; i < this.pipelineSize; i++)
-			this.instructionQueue.add(new NOOP());
+        this.instructionQueue = new ArrayDeque<Instruction>();
+        for (int i = 0; i < this.pipelineSize; i++)
+            this.instructionQueue.add(new NOOP());
 
-		this.stageId = 2;
-	}
+        this.stageId = StageType.EXSTAGE;
+    }
 
-	@Override
-	public void executeUnit() {
-		// TODO Auto-generated method stub
+    @Override
+    public void executeUnit() throws Exception
+    {
+        validateQueueSize();
 
-	}
+        Instruction inst = instructionQueue.peekLast();
+        if (!(inst instanceof NOOP))
+        {
 
-	@Override
-	public int getClockCyclesRequiredForNonPipeLinedUnit() throws Exception {
-		// TODO Auto-generated method stub
-		Instruction inst = instructionQueue.peekLast();
-		if (inst.instructionType.equals(InstructionType.MEMORY_FPREG)
-				|| inst.instructionType.equals(InstructionType.MEMORY_REG))
-			return clockCyclesRequired;
-		else if (inst.instructionType.equals(InstructionType.ARITHMETIC_REG)
-				|| inst.instructionType.equals(InstructionType.ARITHMETIC_IMM))
-			return 1;
+            // TODO for pipelined execution
+            // check if inst has spent enough time in this unit
 
-		throw new Exception("MemoryUnit: Illegal instruction in Memory Unit: "
-				+ inst.toString());
-	}
-	/*
-	 * public void dumpUnitDetails(){
-	 * System.out.println("isPipelined - "+instance.isPipelined());
-	 * System.out.println("isAvailable - "+instance.isAvailable());
-	 * System.out.println("Pipeline Size - "+instance.getPipelineSize());
-	 * System.
-	 * out.println("Clock Cycles required - "+instance.getClockCyclesRequired
-	 * ()); }
-	 */
+            switch (CPU.RUN_TYPE)
+            {
+                case MEMORY:
+
+                    break;
+
+                case PIPELINE:
+                    if (!((CPU.CLOCK - inst.entryCycle[stageId.getId()]) >= this
+                            .getClockCyclesRequiredForNonPipeLinedUnit()))
+                        return;
+                    break;
+                default:
+                    throw new Exception("MemoryUnit Illegal CPU.RUN_TYPE ");
+            }
+
+            // TODO for cache, check if data is available yet
+
+            if (inst.instructionType.equals(InstructionType.MEMORY_FPREG)
+                    || inst.instructionType.equals(InstructionType.MEMORY_REG))
+            {
+                if (inst instanceof StoreInstruction)
+                    DataMemoryManager.instance.setValueToAddress(
+                            (int) inst.address, (int) ((StoreInstruction) inst)
+                                    .getValueToWrite().getSource());
+                else
+                    inst.getDestinationRegister().setDestination(
+                            DataMemoryManager.instance
+                                    .getValueFromAddress((int) inst.address));
+            }
+
+            if (!WriteBackStage.getInstance().checkIfFree(inst))
+                throw new Exception(
+                        "MemoryUnit: won tie, WB Stage should always be free");
+
+            WriteBackStage.getInstance().acceptInstruction(inst);
+            updateExitClockCycle(inst);
+        }
+        instructionQueue.removeLast();
+        instructionQueue.addFirst(new NOOP());
+
+    }
+
+    @Override
+    public int getClockCyclesRequiredForNonPipeLinedUnit() throws Exception
+    {
+        // TODO Auto-generated method stub
+        Instruction inst = instructionQueue.peekLast();
+        if (inst.instructionType.equals(InstructionType.MEMORY_FPREG)
+                || inst.instructionType.equals(InstructionType.MEMORY_REG))
+            return clockCyclesRequired;
+        else if (inst.instructionType.equals(InstructionType.ARITHMETIC_REG)
+                || inst.instructionType.equals(InstructionType.ARITHMETIC_IMM))
+            return 1;
+
+        throw new Exception("MemoryUnit: Illegal instruction in Memory Unit: "
+                + inst.toString());
+    }
+
+    // TODO override acceptInstruction here, first call super.accept , then get
+    // data from datamanager
 
 }

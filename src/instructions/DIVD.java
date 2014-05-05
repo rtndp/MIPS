@@ -1,6 +1,5 @@
 package instructions;
 
-
 public class DIVD extends ThreeRegInstruction
 {
     public DIVD(String sourceLabel1, String sourceLabel2,
@@ -26,7 +25,11 @@ public class DIVD extends ThreeRegInstruction
     @Override
     public void executeInstruction()
     {
-        dest.setDestination(src1.getSource() / src2.getSource());
+        if (src2.getSource() == 0)
+            System.out.println(this.getClass().getSimpleName()
+                    + " Divide by ZERO for instruction:" + debugString());
+        else
+            dest.setDestination(src1.getSource() / src2.getSource());
     }
 
 }

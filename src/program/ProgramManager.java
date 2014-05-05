@@ -44,4 +44,12 @@ public class ProgramManager
         return inst.getClass().getConstructor(inst.getClass())
                 .newInstance(inst);
     }
+
+    public int getInstructionAddreessForLabel(String label) throws Exception
+    {
+        if (!LabelMap.containsKey(label))
+            throw new Exception("Instruction NOT Found at LABEL: " + label);
+
+        return LabelMap.get(label);
+    }
 }

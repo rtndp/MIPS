@@ -2,48 +2,59 @@ package stages;
 
 import instructions.Instruction;
 
-public class FetchStage extends Stage {
+public class FetchStage extends Stage
+{
 
-	private static volatile FetchStage instance;
+    private static volatile FetchStage instance;
 
-	public static FetchStage getInstance() {
+    public static FetchStage getInstance()
+    {
 
-		if (null == instance)
-			synchronized (FetchStage.class) {
-				if (null == instance)
-					instance = new FetchStage();
-			}
+        if (null == instance)
+            synchronized (FetchStage.class)
+            {
+                if (null == instance)
+                    instance = new FetchStage();
+            }
 
-		return instance;
-	}
+        return instance;
+    }
 
-	private functionalUnits.FetchUnit fetch;
+    private functionalUnits.FetchUnit fetch;
 
-	private FetchStage() {
-		super();
-		fetch = functionalUnits.FetchUnit.getInstance();
-	}
+    private FetchStage()
+    {
+        super();
+        fetch = functionalUnits.FetchUnit.getInstance();
+        this.stageType = StageType.IFSTAGE;
+    }
 
-	@Override
-	public void execute() {
-		System.out.println("------------------------------");
-		System.out.println("FETCH - ");
-		// fetch.dumpUnitDetails();
-		/*
-		 * if(fetch.fetch()) CPU.PROGRAM_COUNTER++; else return;
-		 */
-	}
+    @Override
+    public void execute() throws Exception
+    {
+        fetch.executeUnit();
+    }
 
-	@Override
-	public boolean checkIfFree(Instruction instruction) throws Exception {
-		// TODO Implement this method
-		return false;
-	}
+    @Override
+    public boolean checkIfFree(Instruction instruction) throws Exception
+    {
+        return fetch.checkIfFree(instruction);
+    }
 
-	@Override
-	public boolean acceptInstruction(Instruction instruction) throws Exception {
-		// TODO Implement this method
-		return false;
-	}
+    @Override
+    public boolean acceptInstruction(Instruction instruction) throws Exception
+    {
+        if (!fetch.checkIfFree(instruction))
+            throw new Exception("FetchStage: Illegal state exception "
+                    + instruction.toString());
+
+        fetch.acceptInstruction(instruction);
+        return true;
+    }
+
+    public void flushStage() throws Exception
+    {
+        fetch.flushUnit();
+    }
 
 }

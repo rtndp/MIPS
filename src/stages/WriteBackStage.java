@@ -2,47 +2,57 @@ package stages;
 
 import instructions.Instruction;
 
-public class WriteBackStage extends Stage {
+public class WriteBackStage extends Stage
+{
 
-	private static volatile WriteBackStage instance;
+    private static volatile WriteBackStage instance;
 
-	public static WriteBackStage getInstance() {
+    public static WriteBackStage getInstance()
+    {
 
-		if (null == instance)
-			synchronized (WriteBackStage.class) {
-				if (null == instance)
-					instance = new WriteBackStage();
-			}
+        if (null == instance)
+            synchronized (WriteBackStage.class)
+            {
+                if (null == instance)
+                    instance = new WriteBackStage();
+            }
 
-		return instance;
-	}
+        return instance;
+    }
 
-	private functionalUnits.WriteBackUnit writeBack;
+    private functionalUnits.WriteBackUnit writeBack;
 
-	private WriteBackStage() {
-		super();
-		writeBack = functionalUnits.WriteBackUnit.getInstance();
-	}
+    private WriteBackStage()
+    {
+        super();
 
-	@Override
-	public void execute() throws Exception {
-		/*
-		 * System.out.println("------------------------------");
-		 * System.out.println("WRITEBACK - "); writeBack.dumpUnitDetails();
-		 * System.out.println("------------------------------");
-		 */
+        this.stageType = StageType.WBSTAGE;
 
-		writeBack.executeUnit();
-	}
+        writeBack = functionalUnits.WriteBackUnit.getInstance();
+    }
 
-	@Override
-	public boolean acceptInstruction(Instruction instruction) throws Exception {
-		writeBack.acceptInstruction(instruction);
-		return true;
-	}
+    @Override
+    public void execute() throws Exception
+    {
+        /*
+         * System.out.println("------------------------------");
+         * System.out.println("WRITEBACK - "); writeBack.dumpUnitDetails();
+         * System.out.println("------------------------------");
+         */
 
-	@Override
-	public boolean checkIfFree(Instruction instruction) throws Exception {
-		return writeBack.checkIfFree(instruction);
-	}
+        writeBack.executeUnit();
+    }
+
+    @Override
+    public boolean acceptInstruction(Instruction instruction) throws Exception
+    {
+        writeBack.acceptInstruction(instruction);
+        return true;
+    }
+
+    @Override
+    public boolean checkIfFree(Instruction instruction) throws Exception
+    {
+        return writeBack.checkIfFree(instruction);
+    }
 }

@@ -40,9 +40,4 @@ public abstract class TwoRegImmediateInstruction extends Instruction
     {
         return dest;
     }
-
-    public int getImmediate()
-    {
-        return this.immediate;
-    }
 }
