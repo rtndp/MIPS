@@ -1,6 +1,6 @@
 package main;
 
-import cache.ICacheManager;
+import iCache.ICacheManager;
 import instructions.Instruction;
 import memory.DataMemoryFileParser;
 import memory.DataMemoryManager;
