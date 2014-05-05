@@ -2,8 +2,6 @@ package functionalUnits;
 
 import instructions.Instruction;
 import instructions.InstructionType;
-import instructions.LD;
-import instructions.LW;
 import instructions.NOOP;
 import instructions.StoreInstruction;
 
