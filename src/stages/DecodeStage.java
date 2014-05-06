@@ -1,6 +1,7 @@
 package stages;
 
 import validInstructions.DI;
+import enums.StageType;
 import functionalUnits.DecodeUnit;
 
 public class DecodeStage extends Stage

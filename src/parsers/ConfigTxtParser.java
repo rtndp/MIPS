@@ -8,7 +8,7 @@ import managers.ConfigManager;
 
 public class ConfigTxtParser {
 
-	public static void parseConfigFile(String fileName) throws Exception {
+	public static void parse(String fileName) throws Exception {
 		BufferedReader bfread = null;
 		try {
 

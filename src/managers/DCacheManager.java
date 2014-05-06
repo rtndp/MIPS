@@ -1,7 +1,7 @@
 package managers;
 
 import caches.DCache;
-import stages.CPU;
+import stages.ProcessorParams;
 import validInstructions.DI;
 
 public class DCacheManager {
@@ -26,7 +26,7 @@ public class DCacheManager {
 		if (request.lastRequestInstruction == null) {
 			// first time request
 			request.lastRequestInstruction = inst;
-			request.lastRequestInstructionEntryClock = CPU.CLOCK;
+			request.lastRequestInstructionEntryClock = ProcessorParams.CC;
 			request.clockCyclesToBlock = 0;
 
 			if (DI.isStore(inst)) {
@@ -111,7 +111,7 @@ public class DCacheManager {
 	}
 
 	private boolean validateClockCyclesToBlock() throws Exception {
-		if (CPU.CLOCK - request.lastRequestInstructionEntryClock == request.clockCyclesToBlock) {
+		if (ProcessorParams.CC - request.lastRequestInstructionEntryClock == request.clockCyclesToBlock) {
 			// do any cache updates at this point?
 			// cache.setInCache(request.lastRequestInstruction); // hack
 			request.resetValues();

@@ -1,16 +1,10 @@
 package stages;
 
-public class ProcessorParams
-{
-    public static int CLOCK           = 0;
+import enums.ExecutionType;
 
-    public static int PROGRAM_COUNTER = 0;
+public class ProcessorParams {
 
-    public static RUN RUN_TYPE        = RUN.MEMORY; // DEFAULT
-
-    public enum RUN
-    {
-        PIPELINE, MEMORY
-    };
+	public static int CC = 0, PC = 0;
+	public static ExecutionType exeType = ExecutionType.M; // DEFAULT
 
 }

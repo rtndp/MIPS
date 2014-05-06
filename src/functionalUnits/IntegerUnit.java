@@ -1,8 +1,8 @@
 package functionalUnits;
 
-import stages.StageType;
 import validInstructions.DI;
 import validInstructions.NOOP;
+import enums.StageType;
 
 public class IntegerUnit extends FunctionalUnit
 {

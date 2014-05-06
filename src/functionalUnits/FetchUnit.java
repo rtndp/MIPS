@@ -2,11 +2,12 @@ package functionalUnits;
 
 import managers.ICacheManager;
 import managers.ProgramManager;
-import stages.CPU;
+import stages.ProcessorParams;
 import stages.DecodeStage;
-import stages.StageType;
+import utility.Display;
 import validInstructions.DI;
 import validInstructions.NOOP;
+import enums.StageType;
 
 public class FetchUnit extends FunctionalUnit {
 
@@ -43,7 +44,7 @@ public class FetchUnit extends FunctionalUnit {
 		DI inst = peekFirst();
 
 		if (!(inst instanceof NOOP)) {
-			System.out.println(CPU.CLOCK + " Fetch  ");
+			System.out.println(ProcessorParams.CC + " Fetch  ");
 
 			if (DecodeStage.getInstance().checkIfFree(inst)) {
 
@@ -70,7 +71,7 @@ public class FetchUnit extends FunctionalUnit {
 		// updateEntryClockCycle(inst); // hack dont do this!!!
 		updateExitClockCycle(inst);
 		// send to result manager
-		// Display.instance.addInstruction(inst);
+		Display.instance.queueInstructionForDisplay(inst);
 		// remove inst & add NOOP
 		rotatePipe();
 
@@ -83,25 +84,29 @@ public class FetchUnit extends FunctionalUnit {
 			boolean checkInst = false;
 
 			DI next = null;
-			switch (CPU.RUN_TYPE) {
-			case MEMORY:
+			switch (ProcessorParams.exeType) {
+			case M:
 
 				next = ICacheManager.getInstance().getInstructionFromCache(
-						CPU.PROGRAM_COUNTER);
+						ProcessorParams.PC);
 				if (next != null)
 					checkInst = true;
+				
+				/*next = ProgramManager.instance
+						.getInstructionAtAddress(CPU.PROGRAM_COUNTER);
+				checkInst = true;*/
 				break;
 
-			case PIPELINE:
+			case P:
 				next = ProgramManager.instance
-						.getInstructionAtAddress(CPU.PROGRAM_COUNTER);
+						.getInstructionAtAddress(ProcessorParams.PC);
 				checkInst = true;
 				break;
 			}
 
 			if (checkInst && checkIfFree()) {
 				acceptInstruction(next);
-				CPU.PROGRAM_COUNTER++;
+				ProcessorParams.PC++;
 			}
 
 		} // end ifStage.checkIfFree

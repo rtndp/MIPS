@@ -1,17 +1,16 @@
 package start;
 
-import managers.ProgramManager;
 import parsers.ConfigTxtParser;
 import parsers.DataTxtParser;
 import parsers.InstTxtParser;
 import parsers.RegTxtParser;
-import stages.CPU;
-import stages.CPU.RUN;
 import stages.DecodeStage;
 import stages.ExStage;
 import stages.FetchStage;
+import stages.ProcessorParams;
 import stages.WriteBackStage;
 import utility.Display;
+import enums.ExecutionType;
 
 public class Start {
 	/**
@@ -22,24 +21,29 @@ public class Start {
 	 */
 	public static void main(String[] args) throws Exception {
 
+		/**
+		 * Initialize CPU parameters
+		 */
+		ProcessorParams.CC = 0;
+		ProcessorParams.PC = 0;
+		ProcessorParams.exeType = ExecutionType.M;
+		
+		/**
+		 * Parse inst.txt, data.txt, reg.txt, config.txt result.txt
+		 */
 		InstTxtParser.parse(args[0]);
-		ProgramManager.instance.dumpProgram();
-
-		DataTxtParser.parseMemoryFile(args[1]);
-
-		RegTxtParser.parseRegister(args[2]);
-
-		ConfigTxtParser.parseConfigFile(args[3]);
-
+		DataTxtParser.parse(args[1]);
+		RegTxtParser.parse(args[2]);
+		ConfigTxtParser.parse(args[3]);
 		Display.instance.setResultsPath(args[4]);
 
 		/**
-		 * Initialize Global CLOCK and PC to 0
+		 * Initialize singleton instances of all the four stages
+		 * 1. WriteBack
+		 * 2. Execute
+		 * 3. Decode
+		 * 4. Fetch
 		 */
-		CPU.CLOCK = 0;
-		CPU.PROGRAM_COUNTER = 0;
-		CPU.RUN_TYPE = RUN.MEMORY;
-
 		WriteBackStage wbStage = WriteBackStage.getInstance();
 		ExStage exStage = ExStage.getInstance();
 		DecodeStage idStage = DecodeStage.getInstance();
@@ -64,10 +68,10 @@ public class Start {
 				} else
 					extraCLKCount--;
 
-				CPU.CLOCK++;
+				ProcessorParams.CC++;
 			}
 		} catch (Exception e) {
-			System.out.println("ERROR: CLOCK=" + CPU.CLOCK);
+			System.out.println("ERROR: CLOCK=" + ProcessorParams.CC);
 			e.printStackTrace();
 		} finally {
 		}

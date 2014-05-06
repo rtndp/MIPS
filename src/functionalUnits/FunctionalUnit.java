@@ -2,10 +2,10 @@ package functionalUnits;
 
 import java.util.ArrayDeque;
 
-import stages.CPU;
-import stages.StageType;
+import stages.ProcessorParams;
 import validInstructions.DI;
 import validInstructions.NOOP;
+import enums.StageType;
 
 public abstract class FunctionalUnit
 {
@@ -79,7 +79,7 @@ public abstract class FunctionalUnit
         else
         {
             if (!(peekFirst() instanceof NOOP)
-                    && ((CPU.CLOCK - peekFirst().entryCycle[stageId.getId()]) >= getClockCyclesRequiredForNonPipeLinedUnit()))
+                    && ((ProcessorParams.CC - peekFirst().entryCycle[stageId.getId()]) >= getClockCyclesRequiredForNonPipeLinedUnit()))
             {
                 return true;
             }
@@ -116,12 +116,12 @@ public abstract class FunctionalUnit
 
     protected void updateEntryClockCycle(DI inst)
     {
-        inst.entryCycle[this.stageId.getId()] = CPU.CLOCK;
+        inst.entryCycle[this.stageId.getId()] = ProcessorParams.CC;
     }
 
     protected void updateExitClockCycle(DI inst)
     {
-        inst.exitCycle[this.stageId.getId()] = CPU.CLOCK;
+        inst.exitCycle[this.stageId.getId()] = ProcessorParams.CC;
     }
 
     /**

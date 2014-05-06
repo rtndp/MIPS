@@ -20,7 +20,7 @@ public class ProgramManager
     /**
      * Print out the Entire Program
      */
-    public void dumpProgram()
+    /*public void dumpProgram()
     {
 
         for (int key : InstructionList.keySet())
@@ -33,7 +33,7 @@ public class ProgramManager
         {
             System.out.println(Key + " " + LabelMap.get(Key));
         }
-    }
+    }*/
 
     public DI getInstructionAtAddress(int address) throws Exception
     {

@@ -8,7 +8,7 @@ import managers.DataMemoryManager;
 
 // NOTE I break out of parsing after encountering the first empty line or file finishes
 public class DataTxtParser {
-	public static void parseMemoryFile(String fileName) throws Exception {
+	public static void parse(String fileName) throws Exception {
 		BufferedReader bfread = null;
 		try {
 

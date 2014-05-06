@@ -1,7 +1,7 @@
 package functionalUnits;
 
 import managers.ConfigManager;
-import stages.StageType;
+import enums.StageType;
 
 public class FpDivUnit extends FPFunctionalUnit
 {

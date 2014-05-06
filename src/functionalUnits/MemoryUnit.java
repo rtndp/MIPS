@@ -3,13 +3,13 @@ package functionalUnits;
 import managers.ConfigManager;
 import managers.DCacheManager;
 import managers.DataMemoryManager;
-import stages.CPU;
-import stages.StageType;
+import stages.ProcessorParams;
 import stages.WriteBackStage;
 import validInstructions.DI;
 import validInstructions.NOOP;
 import validInstructions.StoreInstruction;
 import enums.InstructionType;
+import enums.StageType;
 
 public class MemoryUnit extends FunctionalUnit {
 
@@ -44,16 +44,16 @@ public class MemoryUnit extends FunctionalUnit {
 			// TODO for pipelined execution
 			// check if inst has spent enough time in this unit
 
-			switch (CPU.RUN_TYPE) {
-			case MEMORY:
+			switch (ProcessorParams.exeType) {
+			case M:
 				// TODO call DCacheManager only if inst is type of Memory
 				// Operation
 				if (DI.isLoadStore(inst)
 						&& !DCacheManager.instance.canProceed(inst))
 					return;
 				break;
-			case PIPELINE:
-				if (!((CPU.CLOCK - inst.entryCycle[stageId.getId()]) >= this
+			case P:
+				if (!((ProcessorParams.CC - inst.entryCycle[stageId.getId()]) >= this
 						.getClockCyclesRequiredForNonPipeLinedUnit()))
 					return;
 				break;

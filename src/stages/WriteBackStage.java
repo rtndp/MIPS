@@ -1,6 +1,7 @@
 package stages;
 
 import validInstructions.DI;
+import enums.StageType;
 
 public class WriteBackStage extends Stage
 {

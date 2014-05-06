@@ -8,7 +8,7 @@ import registers.RegisterManager;
 
 public class RegTxtParser {
 
-	public static void parseRegister(String fileName) throws Exception {
+	public static void parse(String fileName) throws Exception {
 		BufferedReader bfread = null;
 		try {
 

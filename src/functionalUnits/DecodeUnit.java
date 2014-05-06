@@ -4,10 +4,10 @@ import java.util.List;
 
 import managers.ProgramManager;
 import registers.RegisterManager;
-import stages.CPU;
+import stages.ProcessorParams;
 import stages.ExStage;
 import stages.FetchStage;
-import stages.StageType;
+import utility.Display;
 import validInstructions.BEQ;
 import validInstructions.BNE;
 import validInstructions.CB;
@@ -18,6 +18,7 @@ import validInstructions.NOOP;
 import validInstructions.SourceObject;
 import validInstructions.WriteBackObject;
 import enums.FunctionalUnitType;
+import enums.StageType;
 
 public class DecodeUnit extends FunctionalUnit {
 
@@ -57,7 +58,7 @@ public class DecodeUnit extends FunctionalUnit {
 		if (inst instanceof NOOP)
 			return;
 
-		System.out.println(CPU.CLOCK + " Decode " + inst.toString());
+		System.out.println(ProcessorParams.CC + " Decode " + inst.toString());
 
 		boolean hazards = processHazards(inst);
 
@@ -71,7 +72,7 @@ public class DecodeUnit extends FunctionalUnit {
 	private void executeDecode(DI inst) throws Exception {
 
 		updateExitClockCycle(inst);
-		// Display.instance.addInstruction(inst);
+		Display.instance.queueInstructionForDisplay(inst);
 
 		// read source registers
 		List<SourceObject> sources = inst.getSourceRegister();
@@ -91,7 +92,7 @@ public class DecodeUnit extends FunctionalUnit {
 		// process J instruction
 		if (inst instanceof J) {
 			// update PC to label address
-			CPU.PROGRAM_COUNTER = ProgramManager.instance
+			ProcessorParams.PC = ProgramManager.instance
 					.getInstructionAddreessForLabel(((J) inst)
 							.getDestinationLabel());
 
@@ -103,7 +104,7 @@ public class DecodeUnit extends FunctionalUnit {
 			if (inst instanceof BEQ) {
 				if (((CB) inst).compareRegisters()) {
 					// update PC
-					CPU.PROGRAM_COUNTER = ProgramManager.instance
+					ProcessorParams.PC = ProgramManager.instance
 							.getInstructionAddreessForLabel(((BEQ) inst)
 									.getDestinationLabel());
 					// Flush fetch stage
@@ -112,7 +113,7 @@ public class DecodeUnit extends FunctionalUnit {
 			} else if (inst instanceof BNE) {
 				if (!((CB) inst).compareRegisters()) {
 					// update PC
-					CPU.PROGRAM_COUNTER = ProgramManager.instance
+					ProcessorParams.PC = ProgramManager.instance
 							.getInstructionAddreessForLabel(((BNE) inst)
 									.getDestinationLabel());
 					// Flush fetch stage
@@ -122,7 +123,7 @@ public class DecodeUnit extends FunctionalUnit {
 		}
 		// process HLT instruction
 		else if (inst instanceof HLT) {
-			// Display.instance.setHALT(true);
+			Display.instance.setHALT(true);
 		} else {
 
 			if (!ExStage.getInstance().checkIfFree(inst))

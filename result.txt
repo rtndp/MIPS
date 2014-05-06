@@ -1,28 +1,28 @@
-| Instruction               | FT   | ID   | EX   | WB   | RAW | WAR | WAW | Struct |
-| GG: LD F1, 4(R4)          | 6    | 7    | 15   | 16   | N   | N   | N   | N      |
-| LD F2, 8(R5)              | 7    | 8    | 22   | 23   | N   | N   | N   | Y      |
-| ADDD F4, F6, F2           | 8    | 23   | 27   | 28   | Y   | N   | N   | N      |
-| SUBD F5, F7, F1           | 23   | 24   | 28   | 29   | N   | N   | N   | N      |
-| MULD F6, F1, F5           | 29   | 30   | 36   | 37   | N   | N   | N   | N      |
-| ADDD F7, F2, F6           | 30   | 37   | 41   | 42   | Y   | N   | N   | N      |
-| ADDD F6, F1, F7           | 37   | 42   | 46   | 47   | Y   | N   | N   | N      |
-| DADDI R4, R4, 2           | 42   | 43   | 45   | 46   | N   | N   | N   | N      |
-| DADDI R5, R5, 2           | 48   | 49   | 51   | 52   | N   | N   | N   | N      |
-| DSUB R1, R1, R2           | 49   | 50   | 52   | 53   | N   | N   | N   | N      |
-| BNE  R1, R3, GG           | 50   | 53   |      |      | Y   | N   | N   | N      |
-| HLT                       | 53   |      |      |      | N   | N   | N   | N      |
-| GG: LD F1, 4(R4)          | 54   | 55   | 63   | 64   | N   | N   | N   | N      |
-| LD F2, 8(R5)              | 55   | 56   | 65   | 66   | N   | N   | N   | Y      |
-| ADDD F4, F6, F2           | 56   | 66   | 70   | 71   | Y   | N   | N   | N      |
-| SUBD F5, F7, F1           | 66   | 67   | 71   | 72   | N   | N   | N   | N      |
-| MULD F6, F1, F5           | 67   | 72   | 78   | 79   | Y   | N   | N   | N      |
-| ADDD F7, F2, F6           | 72   | 79   | 83   | 84   | Y   | N   | N   | N      |
-| ADDD F6, F1, F7           | 79   | 84   | 88   | 89   | Y   | N   | N   | N      |
-| DADDI R4, R4, 2           | 84   | 85   | 87   | 88   | N   | N   | N   | N      |
-| DADDI R5, R5, 2           | 85   | 86   | 89   | 90   | N   | N   | N   | Y      |
-| DSUB R1, R1, R2           | 86   | 87   | 90   | 91   | N   | N   | N   | Y      |
-| BNE  R1, R3, GG           | 87   | 91   |      |      | Y   | N   | N   | N      |
-| HLT                       | 91   | 92   |      |      | N   | N   | N   | N      |
+ Instruction                FT    ID    EX    WB    RAW  WAR  WAW  Struct 
+ GG: LD F1, 4(R4)           6     7     15    16    N    N    N    N      
+ LD F2, 8(R5)               7     8     22    23    N    N    N    Y      
+ ADDD F4, F6, F2            8     23    27    28    Y    N    N    N      
+ SUBD F5, F7, F1            23    24    28    29    N    N    N    N      
+ MULD F6, F1, F5            29    30    36    37    N    N    N    N      
+ ADDD F7, F2, F6            30    37    41    42    Y    N    N    N      
+ ADDD F6, F1, F7            37    42    46    47    Y    N    N    N      
+ DADDI R4, R4, 2            42    43    45    46    N    N    N    N      
+ DADDI R5, R5, 2            48    49    51    52    N    N    N    N      
+ DSUB R1, R1, R2            49    50    52    53    N    N    N    N      
+ BNE  R1, R3, GG            50    53                Y    N    N    N      
+ HLT                        53                      N    N    N    N      
+ GG: LD F1, 4(R4)           54    55    63    64    N    N    N    N      
+ LD F2, 8(R5)               55    56    65    66    N    N    N    Y      
+ ADDD F4, F6, F2            56    66    70    71    Y    N    N    N      
+ SUBD F5, F7, F1            66    67    71    72    N    N    N    N      
+ MULD F6, F1, F5            67    72    78    79    Y    N    N    N      
+ ADDD F7, F2, F6            72    79    83    84    Y    N    N    N      
+ ADDD F6, F1, F7            79    84    88    89    Y    N    N    N      
+ DADDI R4, R4, 2            84    85    87    88    N    N    N    N      
+ DADDI R5, R5, 2            85    86    89    90    N    N    N    Y      
+ DSUB R1, R1, R2            86    87    90    91    N    N    N    Y      
+ BNE  R1, R3, GG            87    91                Y    N    N    N      
+ HLT                        91    92                N    N    N    N      
 Total number of access requests for instruction cache:         25
 Number of instruction cache hits:                              21Total number of access requests for Data cache:                 4
 Number of Data cache hits:                                      0

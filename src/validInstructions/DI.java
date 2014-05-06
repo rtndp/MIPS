@@ -54,12 +54,13 @@ public abstract class DI implements I {
 		this.printableInstruction = str;
 	}
 
-	/*public String debugString() {
-		return String.format(utility.Constants.instructionDebugFormatString,
-				printableInstruction, Arrays.toString(entryCycle),
-				Arrays.toString(exitCycle), RAW ? 'Y' : 'N', WAR ? 'Y' : 'N',
-				WAW ? 'Y' : 'N', STRUCT ? 'Y' : 'N');
-	}*/
+	/*
+	 * public String debugString() { return
+	 * String.format(utility.Constants.instructionDebugFormatString,
+	 * printableInstruction, Arrays.toString(entryCycle),
+	 * Arrays.toString(exitCycle), RAW ? 'Y' : 'N', WAR ? 'Y' : 'N', WAW ? 'Y' :
+	 * 'N', STRUCT ? 'Y' : 'N'); }
+	 */
 
 	public String getOutputString() {
 		return String.format(utility.Display.instructionOutputFormatString,

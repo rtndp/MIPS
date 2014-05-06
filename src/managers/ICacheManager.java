@@ -1,6 +1,6 @@
 package managers;
 
-import stages.CPU;
+import stages.ProcessorParams;
 import validInstructions.DI;
 import caches.ICache;
 
@@ -62,7 +62,7 @@ public class ICacheManager {
 			if (ICache.getInstance().isInstructionInCache(pc)) {
 
 				lastRequestInstruction = pc;
-				lastRequestCycle = CPU.CLOCK;
+				lastRequestCycle = ProcessorParams.CC;
 				clockCyclesToBlock = ConfigManager.instance.ICacheLatency - 1;
 				cacheHit = true;
 				iCacheAccessHits++;
@@ -78,7 +78,7 @@ public class ICacheManager {
 			} else {
 
 				lastRequestInstruction = pc;
-				lastRequestCycle = CPU.CLOCK;
+				lastRequestCycle = ProcessorParams.CC;
 				delayToBus = MemoryBusManager.instance.getDelay();
 				clockCyclesToBlock = 2
 						* (ConfigManager.instance.ICacheLatency + ConfigManager.instance.MemoryLatency)
@@ -90,7 +90,7 @@ public class ICacheManager {
 
 		} else {
 
-			if (CPU.CLOCK - lastRequestCycle == clockCyclesToBlock) {
+			if (ProcessorParams.CC - lastRequestCycle == clockCyclesToBlock) {
 				if (!cacheHit)
 					ICache.getInstance().populateICache(pc);
 				resetValues();

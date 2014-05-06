@@ -8,6 +8,7 @@ import org.apache.commons.collections4.ListUtils;
 
 import validInstructions.DI;
 import enums.FunctionalUnitType;
+import enums.StageType;
 import functionalUnits.FPFunctionalUnit;
 import functionalUnits.FunctionalUnit;
 import functionalUnits.MemoryUnit;

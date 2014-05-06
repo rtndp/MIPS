@@ -1,11 +1,12 @@
 package functionalUnits;
 
 import registers.RegisterManager;
-import stages.CPU;
-import stages.StageType;
+import stages.ProcessorParams;
+import utility.Display;
 import validInstructions.DI;
 import validInstructions.NOOP;
 import validInstructions.WriteBackObject;
+import enums.StageType;
 
 public class WriteBackUnit extends FunctionalUnit
 {
@@ -42,7 +43,7 @@ public class WriteBackUnit extends FunctionalUnit
         if (inst instanceof NOOP)
             return;
 
-        System.out.println(CPU.CLOCK + " WBUnit " + inst.toString());
+        System.out.println(ProcessorParams.CC + " WBUnit " + inst.toString());
 
         // Write back the data to the destination register if any and unlock
         // destination register as Free
@@ -60,7 +61,7 @@ public class WriteBackUnit extends FunctionalUnit
         // Update the exit cycle in the instruction and pass it on to the result
         updateExitClockCycle(inst);
         // manager for printing
-        //Display.instance.addInstruction(inst);
+        Display.instance.queueInstructionForDisplay(inst);
 
         // Remove the instruction from the queue and enqueue a NOOP
         rotatePipe();
