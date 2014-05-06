@@ -72,7 +72,8 @@ should contain the following information:
 
 - Sample Files - 
 
-inst.txt
+- inst.txt
+
 GG: L.D F1, 4(R4)
 
 L.D F2, 8(R5)
@@ -99,7 +100,8 @@ HLT
 
 HLT
 
-config.txt
+- config.txt
+
 FP adder:  4, yes
 
 FP Multiplier:  6, yes
@@ -112,7 +114,8 @@ I-Cache: 1
 
 D-Cache: 1
 
-data.txt
+- data.txt
+
 00000000000000000000000000000010
 
 00000000000000000010000101010101
@@ -177,7 +180,8 @@ data.txt
 
 00000000000001101101010011110100
 
-reg.txt
+- reg.txt
+
 00000000001000000110011000000011
 
 00000000000000000000000000000011
