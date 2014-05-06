@@ -59,7 +59,8 @@ public class MemoryUnit extends FunctionalUnit
             switch (CPU.RUN_TYPE)
             {
                 case MEMORY:
-
+                		//ADD Call to DCache Manager
+                	
                     break;
 
                 case PIPELINE:
