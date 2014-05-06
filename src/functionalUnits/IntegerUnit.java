@@ -1,8 +1,8 @@
 package functionalUnits;
 
-import instructions.Instruction;
-import instructions.NOOP;
 import stages.StageType;
+import validInstructions.DI;
+import validInstructions.NOOP;
 
 public class IntegerUnit extends FunctionalUnit
 {
@@ -37,7 +37,7 @@ public class IntegerUnit extends FunctionalUnit
     {
         validateQueueSize();
 
-        Instruction inst = peekFirst();
+        DI inst = peekFirst();
 
         if (inst instanceof NOOP)
             return;

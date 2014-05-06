@@ -1,6 +1,6 @@
 package stages;
 
-import instructions.Instruction;
+import validInstructions.DI;
 
 public abstract class Stage
 {
@@ -8,7 +8,7 @@ public abstract class Stage
 
     public abstract void execute() throws Exception;
 
-    public abstract boolean checkIfFree(Instruction instruction)
+    public abstract boolean checkIfFree(DI instruction)
             throws Exception;
 
     public boolean checkIfFree() throws Exception
@@ -16,6 +16,6 @@ public abstract class Stage
         return checkIfFree(null); // will throw exception for ExStage if used
     }
 
-    public abstract boolean acceptInstruction(Instruction instruction)
+    public abstract boolean acceptInstruction(DI instruction)
             throws Exception;
 }

@@ -1,14 +1,12 @@
 package registers;
 
-public class Register<T>
-{
-    String label;
+public class Register {
+	String label;
 
-    T      value;
+	int data;
 
-    public Register(String label)
-    {
-        this.label = label;
-    }
+	public Register(String label) {
+		this.label = label;
+	}
 
 }

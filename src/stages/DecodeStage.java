@@ -1,6 +1,6 @@
 package stages;
 
-import instructions.Instruction;
+import validInstructions.DI;
 import functionalUnits.DecodeUnit;
 
 public class DecodeStage extends Stage
@@ -37,13 +37,13 @@ public class DecodeStage extends Stage
     }
 
     @Override
-    public boolean checkIfFree(Instruction instruction) throws Exception
+    public boolean checkIfFree(DI instruction) throws Exception
     {
         return decode.checkIfFree(instruction);
     }
 
     @Override
-    public boolean acceptInstruction(Instruction instruction) throws Exception
+    public boolean acceptInstruction(DI instruction) throws Exception
     {
         if (!decode.checkIfFree(instruction))
             throw new Exception("DECODESTAGE: Illegal state exception "

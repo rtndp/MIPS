@@ -1,12 +1,11 @@
 package functionalUnits;
 
-import instructions.Instruction;
-import instructions.NOOP;
-
 import java.util.ArrayDeque;
 
 import stages.CPU;
 import stages.StageType;
+import validInstructions.DI;
+import validInstructions.NOOP;
 
 public abstract class FunctionalUnit
 {
@@ -15,7 +14,7 @@ public abstract class FunctionalUnit
     public int                      clockCyclesRequired;
     public int                      pipelineSize;
     public StageType                stageId;
-    private ArrayDeque<Instruction> instructionQueue;
+    private ArrayDeque<DI> instructionQueue;
 
     public abstract void executeUnit() throws Exception;
 
@@ -24,7 +23,7 @@ public abstract class FunctionalUnit
 
     // TODO: Increment entry cycle and exit cycle clock depending on stage
     // number
-    public void acceptInstruction(Instruction instruction) throws Exception
+    public void acceptInstruction(DI instruction) throws Exception
     {
 
         if (!checkIfFree(instruction))
@@ -53,7 +52,7 @@ public abstract class FunctionalUnit
     }
 
     // This is being done for the execute stage functional units.
-    public boolean checkIfFree(Instruction instruction) throws Exception
+    public boolean checkIfFree(DI instruction) throws Exception
     {
         validateQueueSize();
         return (peekLast() instanceof NOOP) ? true : false;
@@ -115,12 +114,12 @@ public abstract class FunctionalUnit
         // }
     }
 
-    protected void updateEntryClockCycle(Instruction inst)
+    protected void updateEntryClockCycle(DI inst)
     {
         inst.entryCycle[this.stageId.getId()] = CPU.CLOCK;
     }
 
-    protected void updateExitClockCycle(Instruction inst)
+    protected void updateExitClockCycle(DI inst)
     {
         inst.exitCycle[this.stageId.getId()] = CPU.CLOCK;
     }
@@ -130,15 +129,15 @@ public abstract class FunctionalUnit
      * 
      */
 
-    protected Instruction[] pipelineToArray()
+    protected DI[] pipelineToArray()
     {
-        return (Instruction[]) instructionQueue
-                .toArray(new Instruction[instructionQueue.size()]);
+        return (DI[]) instructionQueue
+                .toArray(new DI[instructionQueue.size()]);
     }
 
     protected void createPipelineQueue(int size)
     {
-        instructionQueue = new ArrayDeque<Instruction>();
+        instructionQueue = new ArrayDeque<DI>();
         for (int i = 0; i < size; i++)
             instructionQueue.addLast(new NOOP());
     }
@@ -150,32 +149,32 @@ public abstract class FunctionalUnit
         instructionQueue.addLast(new NOOP());
     }
 
-    public Instruction peekFirst()
+    public DI peekFirst()
     {
         return instructionQueue.peekFirst();
     }
 
-    public Instruction peekLast()
+    public DI peekLast()
     {
         return instructionQueue.peekLast();
     }
 
-    protected void addFirst(Instruction inst)
+    protected void addFirst(DI inst)
     {
         instructionQueue.addFirst(inst);
     }
 
-    protected void addLast(Instruction inst)
+    protected void addLast(DI inst)
     {
         instructionQueue.addLast(inst);
     }
 
-    protected Instruction removeFirst()
+    protected DI removeFirst()
     {
         return instructionQueue.removeFirst();
     }
 
-    protected Instruction removeLast()
+    protected DI removeLast()
     {
         return instructionQueue.removeLast();
     }

@@ -1,223 +1,190 @@
 package functionalUnits;
 
-import instructions.BEQ;
-import instructions.BNE;
-import instructions.ConditionalBranchInstruction;
-import instructions.FunctionalUnitType;
-import instructions.HLT;
-import instructions.Instruction;
-import instructions.J;
-import instructions.NOOP;
-import instructions.SourceObject;
-import instructions.WriteBackObject;
-
 import java.util.List;
 
-import program.ProgramManager;
+import managers.ProgramManager;
 import registers.RegisterManager;
-import results.ResultsManager;
 import stages.CPU;
 import stages.ExStage;
 import stages.FetchStage;
 import stages.StageType;
+import validInstructions.BEQ;
+import validInstructions.BNE;
+import validInstructions.CB;
+import validInstructions.DI;
+import validInstructions.HLT;
+import validInstructions.J;
+import validInstructions.NOOP;
+import validInstructions.SourceObject;
+import validInstructions.WriteBackObject;
+import enums.FunctionalUnitType;
 
-public class DecodeUnit extends FunctionalUnit
-{
+public class DecodeUnit extends FunctionalUnit {
 
-    private static volatile DecodeUnit instance;
+	private static volatile DecodeUnit instance;
 
-    public static DecodeUnit getInstance()
-    {
-        if (null == instance)
-            synchronized (DecodeUnit.class)
-            {
-                if (null == instance)
-                    instance = new DecodeUnit();
-            }
+	public static DecodeUnit getInstance() {
+		if (null == instance)
+			synchronized (DecodeUnit.class) {
+				if (null == instance)
+					instance = new DecodeUnit();
+			}
 
-        return instance;
-    }
+		return instance;
+	}
 
-    private DecodeUnit()
-    {
-        super();
-        isPipelined = false;
-        clockCyclesRequired = 1;
-        pipelineSize = 1;
-        stageId = StageType.IDSTAGE;
-        createPipelineQueue(pipelineSize);
-    }
+	private DecodeUnit() {
+		super();
+		isPipelined = false;
+		clockCyclesRequired = 1;
+		pipelineSize = 1;
+		stageId = StageType.IDSTAGE;
+		createPipelineQueue(pipelineSize);
+	}
 
-    @Override
-    public int getClockCyclesRequiredForNonPipeLinedUnit()
-    {
-        return clockCyclesRequired;
-    }
+	@Override
+	public int getClockCyclesRequiredForNonPipeLinedUnit() {
+		return clockCyclesRequired;
+	}
 
-    @Override
-    public void executeUnit() throws Exception
-    {
-        // Called by the decode stage
-        validateQueueSize();
+	@Override
+	public void executeUnit() throws Exception {
+		// Called by the decode stage
+		validateQueueSize();
 
-        Instruction inst = peekFirst();
+		DI inst = peekFirst();
 
-        if (inst instanceof NOOP)
-            return;
+		if (inst instanceof NOOP)
+			return;
 
-        System.out.println(CPU.CLOCK + " Decode " + inst.debugString());
+		System.out.println(CPU.CLOCK + " Decode " + inst.toString());
 
-        boolean hazards = processHazards(inst);
+		boolean hazards = processHazards(inst);
 
-        if (!hazards)
-            executeDecode(inst);
+		if (!hazards)
+			executeDecode(inst);
 
-        validateQueueSize();
+		validateQueueSize();
 
-    }
+	}
 
-    private void executeDecode(Instruction inst) throws Exception
-    {
+	private void executeDecode(DI inst) throws Exception {
 
-        updateExitClockCycle(inst);
-        ResultsManager.instance.addInstruction(inst);
+		updateExitClockCycle(inst);
+		// Display.instance.addInstruction(inst);
 
-        // read source registers
-        List<SourceObject> sources = inst.getSourceRegister();
-        if (sources != null)
-        {
-            for (SourceObject register : sources)
-            {
-                register.setSource(RegisterManager.instance
-                        .getRegisterValue(register.getSourceLabel()));
-            }
-        }
+		// read source registers
+		List<SourceObject> sources = inst.getSourceRegister();
+		if (sources != null) {
+			for (SourceObject register : sources) {
+				register.setSource(RegisterManager.instance
+						.getRegisterValue(register.getSourceLabel()));
+			}
+		}
 
-        // lock destination register
-        WriteBackObject destReg = inst.getDestinationRegister();
-        if (destReg != null)
-            RegisterManager.instance.setRegisterBusy(destReg
-                    .getDestinationLabel());
+		// lock destination register
+		WriteBackObject destReg = inst.getDestinationRegister();
+		if (destReg != null)
+			RegisterManager.instance.setRegisterBusy(destReg
+					.getDestinationLabel());
 
-        // process J instruction
-        if (inst instanceof J)
-        {
-            // update PC to label address
-            CPU.PROGRAM_COUNTER = ProgramManager.instance
-                    .getInstructionAddreessForLabel(((J) inst)
-                            .getDestinationLabel());
+		// process J instruction
+		if (inst instanceof J) {
+			// update PC to label address
+			CPU.PROGRAM_COUNTER = ProgramManager.instance
+					.getInstructionAddreessForLabel(((J) inst)
+							.getDestinationLabel());
 
-            FetchStage.getInstance().flushStage();
+			FetchStage.getInstance().flushStage();
 
-        }
-        // process BNE,BEQ instruction
-        else if (inst instanceof ConditionalBranchInstruction)
-        {
-            if (inst instanceof BEQ)
-            {
-                if (((ConditionalBranchInstruction) inst).compareRegisters())
-                {
-                    // update PC
-                    CPU.PROGRAM_COUNTER = ProgramManager.instance
-                            .getInstructionAddreessForLabel(((BEQ) inst)
-                                    .getDestinationLabel());
-                    // Flush fetch stage
-                    FetchStage.getInstance().flushStage();
-                }
-            }
-            else if (inst instanceof BNE)
-            {
-                if (!((ConditionalBranchInstruction) inst).compareRegisters())
-                {
-                    // update PC
-                    CPU.PROGRAM_COUNTER = ProgramManager.instance
-                            .getInstructionAddreessForLabel(((BNE) inst)
-                                    .getDestinationLabel());
-                    // Flush fetch stage
-                    FetchStage.getInstance().flushStage();
-                }
-            }
-        }
-        // process HLT instruction
-        else if (inst instanceof HLT)
-        {
-            ResultsManager.instance.setHALT(true);
-        }
-        else
-        {
+		}
+		// process BNE,BEQ instruction
+		else if (inst instanceof CB) {
+			if (inst instanceof BEQ) {
+				if (((CB) inst).compareRegisters()) {
+					// update PC
+					CPU.PROGRAM_COUNTER = ProgramManager.instance
+							.getInstructionAddreessForLabel(((BEQ) inst)
+									.getDestinationLabel());
+					// Flush fetch stage
+					FetchStage.getInstance().flushStage();
+				}
+			} else if (inst instanceof BNE) {
+				if (!((CB) inst).compareRegisters()) {
+					// update PC
+					CPU.PROGRAM_COUNTER = ProgramManager.instance
+							.getInstructionAddreessForLabel(((BNE) inst)
+									.getDestinationLabel());
+					// Flush fetch stage
+					FetchStage.getInstance().flushStage();
+				}
+			}
+		}
+		// process HLT instruction
+		else if (inst instanceof HLT) {
+			// Display.instance.setHALT(true);
+		} else {
 
-            if (!ExStage.getInstance().checkIfFree(inst))
-                throw new Exception(
-                        "DecodeUnit: failed in exstage.checkIfFree after resolving struct hazard "
-                                + inst.toString());
+			if (!ExStage.getInstance().checkIfFree(inst))
+				throw new Exception(
+						"DecodeUnit: failed in exstage.checkIfFree after resolving struct hazard "
+								+ inst.toString());
 
-            ExStage.getInstance().acceptInstruction(inst);
+			ExStage.getInstance().acceptInstruction(inst);
 
-        }
+		}
 
-        rotatePipe();
-    }
+		rotatePipe();
+	}
 
-    private boolean processStruct(Instruction inst) throws Exception
-    {
-        // Check for possible STRUCT hazards
-        FunctionalUnitType type = inst.functionalUnitType;
-        if (!type.equals(FunctionalUnitType.UNKNOWN))
-        {
-            if (!(ExStage.getInstance().checkIfFree(inst)))
-            {
-                inst.STRUCT = true;
-                return true;
-            }
-        }
+	private boolean processStruct(DI inst) throws Exception {
+		// Check for possible STRUCT hazards
+		FunctionalUnitType type = inst.functionalUnitType;
+		if (!type.equals(FunctionalUnitType.UNKNOWN)) {
+			if (!(ExStage.getInstance().checkIfFree(inst))) {
+				inst.STRUCT = true;
+				return true;
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    private boolean processRAW(Instruction inst) throws Exception
-    {
-        // Check for possible RAW hazards
+	private boolean processRAW(DI inst) throws Exception {
+		// Check for possible RAW hazards
 
-        List<SourceObject> sources = inst.getSourceRegister();
-        if (sources != null)
-        {
-            for (SourceObject register : sources)
-            {
-                if (!RegisterManager.instance.isRegisterFree(register
-                        .getSourceLabel()))
-                {
-                    inst.RAW = true;
-                    return true;
-                }
-            }
-        }
+		List<SourceObject> sources = inst.getSourceRegister();
+		if (sources != null) {
+			for (SourceObject register : sources) {
+				if (!RegisterManager.instance.isRegisterFree(register
+						.getSourceLabel())) {
+					inst.RAW = true;
+					return true;
+				}
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    private boolean processWAW(Instruction inst) throws Exception
-    {
-        WriteBackObject dest = inst.getDestinationRegister();
-        if (dest != null)
-        {
+	private boolean processWAW(DI inst) throws Exception {
+		WriteBackObject dest = inst.getDestinationRegister();
+		if (dest != null) {
 
-            if (!RegisterManager.instance.isRegisterFree(dest
-                    .getDestinationLabel()))
-            {
-                inst.WAW = true;
-                return true;
-            }
-        }
-        return false;
-    }
+			if (!RegisterManager.instance.isRegisterFree(dest
+					.getDestinationLabel())) {
+				inst.WAW = true;
+				return true;
+			}
+		}
+		return false;
+	}
 
-    private boolean processWAR(Instruction inst)
-    {
-        return false;
-    }
+	private boolean processWAR(DI inst) {
+		return false;
+	}
 
-    private boolean processHazards(Instruction inst) throws Exception
-    {
-        return (processRAW(inst) || processWAR(inst) || processWAW(inst) || processStruct(inst));
-    }
+	private boolean processHazards(DI inst) throws Exception {
+		return (processRAW(inst) || processWAR(inst) || processWAW(inst) || processStruct(inst));
+	}
 }

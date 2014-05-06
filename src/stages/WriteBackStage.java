@@ -1,6 +1,6 @@
 package stages;
 
-import instructions.Instruction;
+import validInstructions.DI;
 
 public class WriteBackStage extends Stage
 {
@@ -44,14 +44,14 @@ public class WriteBackStage extends Stage
     }
 
     @Override
-    public boolean acceptInstruction(Instruction instruction) throws Exception
+    public boolean acceptInstruction(DI instruction) throws Exception
     {
         writeBack.acceptInstruction(instruction);
         return true;
     }
 
     @Override
-    public boolean checkIfFree(Instruction instruction) throws Exception
+    public boolean checkIfFree(DI instruction) throws Exception
     {
         return writeBack.checkIfFree(instruction);
     }

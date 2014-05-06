@@ -17,7 +17,7 @@ public class RegisterManager
     // they're busy
 
     Map<String, RegisterState>  registerStateMap = new TreeMap<String, RegisterState>();
-    Map<String, Register<Long>> registerMap      = new TreeMap<String, Register<Long>>();
+    Map<String, Register> registerMap      = new TreeMap<String, Register>();
 
     public void initializeRegisters()
     {
@@ -29,10 +29,10 @@ public class RegisterManager
             String intRKey = "R" + i;
             String FPRKey = "F" + i;
 
-            Register<Long> intR = new Register<Long>(intRKey);
-            intR.value = 0L;
-            Register<Long> fpR = new Register<Long>(FPRKey);
-            fpR.value = 0L;
+            Register intR = new Register(intRKey);
+            intR.data = 0;
+            Register fpR = new Register(FPRKey);
+            fpR.data = 0;
 
             registerMap.put(intRKey, intR);
             registerMap.put(FPRKey, fpR);
@@ -42,18 +42,18 @@ public class RegisterManager
         }
     }
 
-    public void setRegisterValue(String label, long val) throws Exception
+    public void setRegisterValue(String label, int val) throws Exception
     {
         label = ValidateRegisterName.getValidRegisterName(label);
-        Register<Long> reg = registerMap.get(label);
-        reg.value = (long) val;
+        Register reg = registerMap.get(label);
+        reg.data = val;
     }
 
-    public long getRegisterValue(String label) throws Exception
+    public int getRegisterValue(String label) throws Exception
     {
         label = ValidateRegisterName.getValidRegisterName(label);
-        Register<Long> reg = registerMap.get(label);
-        return reg.value;
+        Register reg = registerMap.get(label);
+        return reg.data;
     }
 
     public boolean isRegisterFree(String label) throws Exception
@@ -75,15 +75,6 @@ public class RegisterManager
         registerStateMap.put(label, RegisterState.BUSY);
     }
 
-    public void dumpAllRegisters()
-    {
-        String leftAlignFormat = "| %-5s | %-5s | %-10d |%n";
-        for (String label : registerMap.keySet())
-        {
-            Register<Long> reg = registerMap.get(label);
-            System.out.format(leftAlignFormat, label,
-                    registerStateMap.get(label), reg.value);
-        }
-    }
+    
 
 }

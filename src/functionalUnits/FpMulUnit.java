@@ -1,7 +1,7 @@
 package functionalUnits;
 
+import managers.ConfigManager;
 import stages.StageType;
-import config.ConfigManager;
 
 public class FpMulUnit extends FPFunctionalUnit
 {

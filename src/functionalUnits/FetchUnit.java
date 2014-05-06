@@ -1,125 +1,110 @@
 package functionalUnits;
 
-import iCache.ICacheManager;
-import instructions.Instruction;
-import instructions.NOOP;
-import program.ProgramManager;
-import results.ResultsManager;
+import managers.ICacheManager;
+import managers.ProgramManager;
 import stages.CPU;
 import stages.DecodeStage;
 import stages.StageType;
+import validInstructions.DI;
+import validInstructions.NOOP;
 
-public class FetchUnit extends FunctionalUnit
-{
+public class FetchUnit extends FunctionalUnit {
 
-    private static volatile FetchUnit instance;
+	private static volatile FetchUnit instance;
 
-    public static FetchUnit getInstance()
-    {
-        if (null == instance)
-            synchronized (FetchUnit.class)
-            {
-                if (null == instance)
-                    instance = new FetchUnit();
-            }
+	public static FetchUnit getInstance() {
+		if (null == instance)
+			synchronized (FetchUnit.class) {
+				if (null == instance)
+					instance = new FetchUnit();
+			}
 
-        return instance;
-    }
+		return instance;
+	}
 
-    private FetchUnit()
-    {
-        super();
-        this.isPipelined = false;
-        this.clockCyclesRequired = 1;
-        this.pipelineSize = 1;
-        this.stageId = StageType.IFSTAGE;
-        createPipelineQueue(pipelineSize);
-    }
+	private FetchUnit() {
+		super();
+		this.isPipelined = false;
+		this.clockCyclesRequired = 1;
+		this.pipelineSize = 1;
+		this.stageId = StageType.IFSTAGE;
+		createPipelineQueue(pipelineSize);
+	}
 
-    @Override
-    public int getClockCyclesRequiredForNonPipeLinedUnit()
-    {
-        return clockCyclesRequired;
-    }
+	@Override
+	public int getClockCyclesRequiredForNonPipeLinedUnit() {
+		return clockCyclesRequired;
+	}
 
-    @Override
-    public void executeUnit() throws Exception
-    {
-        validateQueueSize();
+	@Override
+	public void executeUnit() throws Exception {
+		validateQueueSize();
 
-        Instruction inst = peekFirst();
+		DI inst = peekFirst();
 
-        if (!(inst instanceof NOOP))
-        {
-            System.out.println(CPU.CLOCK + " Fetch  " + inst.debugString());
+		if (!(inst instanceof NOOP)) {
+			System.out.println(CPU.CLOCK + " Fetch  ");
 
-            if (DecodeStage.getInstance().checkIfFree(inst))
-            {
+			if (DecodeStage.getInstance().checkIfFree(inst)) {
 
-                DecodeStage.getInstance().acceptInstruction(inst);
-                updateExitClockCycle(inst);
-                rotatePipe();
-            }
-        }
+				DecodeStage.getInstance().acceptInstruction(inst);
+				updateExitClockCycle(inst);
+				rotatePipe();
+			}
+		}
 
-        fetchNextInstruction();
-    }
+		fetchNextInstruction();
+	}
 
-    public void flushUnit() throws Exception
-    {
-        validateQueueSize();
+	public void flushUnit() throws Exception {
+		validateQueueSize();
 
-        Instruction inst = peekFirst();
+		DI inst = peekFirst();
 
-        System.out.println("FetchUnit flushUnit called for inst: "
-                + inst.debugString());
+		System.out.println("FetchUnit flushUnit called for inst: "+inst.toString());
 
-        if (inst instanceof NOOP)
-            return;
+		if (inst instanceof NOOP)
+			return;
 
-        // update inst exitcycle
-        // updateEntryClockCycle(inst); // hack dont do this!!!
-        updateExitClockCycle(inst);
-        // send to result manager
-        ResultsManager.instance.addInstruction(inst);
-        // remove inst & add NOOP
-        rotatePipe();
+		// update inst exitcycle
+		// updateEntryClockCycle(inst); // hack dont do this!!!
+		updateExitClockCycle(inst);
+		// send to result manager
+		// Display.instance.addInstruction(inst);
+		// remove inst & add NOOP
+		rotatePipe();
 
-        validateQueueSize();
-    }
+		validateQueueSize();
+	}
 
-    private void fetchNextInstruction() throws Exception
-    {
-        // fetch a new instruction only if ifStage is free
-        if (checkIfFree())
-        {
-            boolean checkInst = false;
+	private void fetchNextInstruction() throws Exception {
+		// fetch a new instruction only if ifStage is free
+		if (checkIfFree()) {
+			boolean checkInst = false;
 
-            Instruction next = null;
-            switch (CPU.RUN_TYPE)
-            {
-                case MEMORY:
+			DI next = null;
+			switch (CPU.RUN_TYPE) {
+			case MEMORY:
 
-                    next = ICacheManager.getInstance()
-                            .getInstructionFromCache(CPU.PROGRAM_COUNTER);
-                    if (next != null)
-                        checkInst = true;
-                    break;
+				next = ICacheManager.getInstance().getInstructionFromCache(
+						CPU.PROGRAM_COUNTER);
+				if (next != null)
+					checkInst = true;
+				break;
 
-                case PIPELINE:
-                    next = ProgramManager.instance
-                            .getInstructionAtAddress(CPU.PROGRAM_COUNTER);
-                    checkInst = true;
-                    break;
-            }
+			case PIPELINE:
+				next = ProgramManager.instance
+						.getInstructionAtAddress(CPU.PROGRAM_COUNTER);
+				checkInst = true;
+				break;
+			}
 
-            if (checkInst && checkIfFree())
-            {
-                acceptInstruction(next);
-                CPU.PROGRAM_COUNTER++;
-            }
+			if (checkInst && checkIfFree()) {
+				acceptInstruction(next);
+				CPU.PROGRAM_COUNTER++;
+			}
 
-        } // end ifStage.checkIfFree
+		} // end ifStage.checkIfFree
 
-    }
+	}
 }

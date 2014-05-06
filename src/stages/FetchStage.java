@@ -1,6 +1,6 @@
 package stages;
 
-import instructions.Instruction;
+import validInstructions.DI;
 
 public class FetchStage extends Stage
 {
@@ -36,13 +36,13 @@ public class FetchStage extends Stage
     }
 
     @Override
-    public boolean checkIfFree(Instruction instruction) throws Exception
+    public boolean checkIfFree(DI instruction) throws Exception
     {
         return fetch.checkIfFree(instruction);
     }
 
     @Override
-    public boolean acceptInstruction(Instruction instruction) throws Exception
+    public boolean acceptInstruction(DI instruction) throws Exception
     {
         if (!fetch.checkIfFree(instruction))
             throw new Exception("FetchStage: Illegal state exception "
