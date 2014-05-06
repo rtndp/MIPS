@@ -1,8 +1,7 @@
 package enums;
 
-public enum FunctionalUnitType
-{
+public enum FunctionalUnitType {
 
-    FPADD, FPMUL, FPDIV, IU, UNKNOWN
+	FPADD, FPMUL, FPDIV, IU, UNKNOWN
 
 }
