@@ -1,5 +1,6 @@
 package results;
 
+import iCache.ICacheManager;
 import instructions.Instruction;
 
 import java.io.BufferedWriter;
@@ -10,6 +11,7 @@ import java.util.TreeMap;
 
 import program.ProgramManager;
 import stages.StageType;
+import dCache.DCacheManager;
 
 public class ResultsManager
 {
@@ -46,8 +48,9 @@ public class ResultsManager
             // System.out.format("%-3s ", key);
             // System.out.println(inst.debugString());
             System.out.println(inst.getOutputString());
-
         }
+        System.out.println(ICacheManager.getInstance().getICacheStatistics());
+        System.out.println(DCacheManager.instance.getDCacheStatistics());
     }
 
     public void writeResults()
@@ -65,6 +68,9 @@ public class ResultsManager
                 resultsWriter.write(inst.getOutputString());
                 resultsWriter.newLine();
             }
+            resultsWriter.write(ICacheManager.getInstance().getICacheStatistics());
+            resultsWriter.write(DCacheManager.instance.getDCacheStatistics());
+            resultsWriter.newLine();
             resultsWriter.flush();
             resultsWriter.close();
         }

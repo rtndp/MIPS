@@ -1,22 +1,19 @@
 package dCache;
 
-import java.util.Map;
-import java.util.TreeMap;
+class DCacheBlock
+{
+    int     baseAddress;
+    boolean dirty;
 
-public class DCacheBlock {
+    public DCacheBlock(int baseAddress)
+    {
+        this.baseAddress = baseAddress;
+        this.dirty = false;
+    }
 
-	Map<Integer, Integer> words;
-	
-	int tag;
-	boolean dirty;
-	int startAddress;
-
-	public DCacheBlock() {
-		words = new TreeMap<Integer, Integer>();
-	}
-	
-	public DCacheBlock(Map<Integer, Integer> map){
-		this.words = map;
-	}
+    public boolean isFree()
+    {
+        return (baseAddress == -1);
+    }
 
 }

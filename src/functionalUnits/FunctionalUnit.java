@@ -11,11 +11,11 @@ import stages.StageType;
 public abstract class FunctionalUnit
 {
 
-    public boolean                 isPipelined;
-    public int                     clockCyclesRequired;
-    public int                     pipelineSize;
-    public StageType               stageId;
-    public ArrayDeque<Instruction> instructionQueue;
+    public boolean                  isPipelined;
+    public int                      clockCyclesRequired;
+    public int                      pipelineSize;
+    public StageType                stageId;
+    private ArrayDeque<Instruction> instructionQueue;
 
     public abstract void executeUnit() throws Exception;
 
@@ -31,8 +31,8 @@ public abstract class FunctionalUnit
             throw new Exception("FUNCTIONALUNIT: Illegal state of queue "
                     + this.getClass().getSimpleName());
 
-        instructionQueue.removeFirst();
-        instructionQueue.addFirst(instruction);
+        removeLast();
+        addLast(instruction);
 
         updateEntryClockCycle(instruction);
 
@@ -56,7 +56,7 @@ public abstract class FunctionalUnit
     public boolean checkIfFree(Instruction instruction) throws Exception
     {
         validateQueueSize();
-        return (instructionQueue.peekFirst() instanceof NOOP) ? true : false;
+        return (peekLast() instanceof NOOP) ? true : false;
 
     }
 
@@ -72,16 +72,15 @@ public abstract class FunctionalUnit
     {
         if (isPipelined)
         {
-            if (!(instructionQueue.peekLast() instanceof NOOP))
+            if (!(peekFirst() instanceof NOOP))
             {
                 return true;
             }
         }
         else
         {
-            if (!(instructionQueue.peekLast() instanceof NOOP)
-                    && ((CPU.CLOCK - instructionQueue.peekLast().entryCycle[stageId
-                            .getId()]) >= getClockCyclesRequiredForNonPipeLinedUnit()))
+            if (!(peekFirst() instanceof NOOP)
+                    && ((CPU.CLOCK - peekFirst().entryCycle[stageId.getId()]) >= getClockCyclesRequiredForNonPipeLinedUnit()))
             {
                 return true;
             }
@@ -101,7 +100,7 @@ public abstract class FunctionalUnit
         validateQueueSize();
 
         // TODO find this out else do
-        instructionQueue.peekLast().STRUCT = true;
+        peekFirst().STRUCT = true;
 
         // // starting from last inst till we reach first of Q or a NOOP mark
         // // Struct Hazard
@@ -126,11 +125,58 @@ public abstract class FunctionalUnit
         inst.exitCycle[this.stageId.getId()] = CPU.CLOCK;
     }
 
+    /**
+     * Functions to update instructionQueue
+     * 
+     */
+
+    protected Instruction[] pipelineToArray()
+    {
+        return (Instruction[]) instructionQueue
+                .toArray(new Instruction[instructionQueue.size()]);
+    }
+
+    protected void createPipelineQueue(int size)
+    {
+        instructionQueue = new ArrayDeque<Instruction>();
+        for (int i = 0; i < size; i++)
+            instructionQueue.addLast(new NOOP());
+    }
+
     protected void rotatePipe() throws Exception
     {
         validateQueueSize();
-        instructionQueue.removeLast();
-        instructionQueue.addFirst(new NOOP());
+        instructionQueue.removeFirst();
+        instructionQueue.addLast(new NOOP());
     }
 
+    public Instruction peekFirst()
+    {
+        return instructionQueue.peekFirst();
+    }
+
+    public Instruction peekLast()
+    {
+        return instructionQueue.peekLast();
+    }
+
+    protected void addFirst(Instruction inst)
+    {
+        instructionQueue.addFirst(inst);
+    }
+
+    protected void addLast(Instruction inst)
+    {
+        instructionQueue.addLast(inst);
+    }
+
+    protected Instruction removeFirst()
+    {
+        return instructionQueue.removeFirst();
+    }
+
+    protected Instruction removeLast()
+    {
+        return instructionQueue.removeLast();
+    }
 }

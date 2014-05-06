@@ -4,14 +4,12 @@ import instructions.Instruction;
 import instructions.InstructionType;
 import instructions.NOOP;
 import instructions.StoreInstruction;
-
-import java.util.ArrayDeque;
-
 import memory.DataMemoryManager;
 import stages.CPU;
 import stages.StageType;
 import stages.WriteBackStage;
 import config.ConfigManager;
+import dCache.DCacheManager;
 
 public class MemoryUnit extends FunctionalUnit
 {
@@ -33,15 +31,11 @@ public class MemoryUnit extends FunctionalUnit
     private MemoryUnit()
     {
         super();
-        this.isPipelined = false;
-        this.clockCyclesRequired = ConfigManager.instance.MemoryLatency;
-        this.pipelineSize = 1;
-
-        this.instructionQueue = new ArrayDeque<Instruction>();
-        for (int i = 0; i < this.pipelineSize; i++)
-            this.instructionQueue.add(new NOOP());
-
-        this.stageId = StageType.EXSTAGE;
+        isPipelined = false;
+        clockCyclesRequired = ConfigManager.instance.MemoryLatency;
+        pipelineSize = 1;
+        stageId = StageType.EXSTAGE;
+        createPipelineQueue(pipelineSize);
     }
 
     @Override
@@ -49,7 +43,7 @@ public class MemoryUnit extends FunctionalUnit
     {
         validateQueueSize();
 
-        Instruction inst = instructionQueue.peekLast();
+        Instruction inst = peekFirst();
         if (!(inst instanceof NOOP))
         {
 
@@ -59,10 +53,12 @@ public class MemoryUnit extends FunctionalUnit
             switch (CPU.RUN_TYPE)
             {
                 case MEMORY:
-                		//ADD Call to DCache Manager
-                	
+                    // TODO call DCacheManager only if inst is type of Memory
+                    // Operation
+                    if (Instruction.isLoadStore(inst)
+                            && !DCacheManager.instance.canProceed(inst))
+                        return;
                     break;
-
                 case PIPELINE:
                     if (!((CPU.CLOCK - inst.entryCycle[stageId.getId()]) >= this
                             .getClockCyclesRequiredForNonPipeLinedUnit()))
@@ -74,8 +70,7 @@ public class MemoryUnit extends FunctionalUnit
 
             // TODO for cache, check if data is available yet
 
-            if (inst.instructionType.equals(InstructionType.MEMORY_FPREG)
-                    || inst.instructionType.equals(InstructionType.MEMORY_REG))
+            if (Instruction.isLoadStore(inst))
             {
                 if (inst instanceof StoreInstruction)
                     DataMemoryManager.instance.setValueToAddress(
@@ -94,8 +89,7 @@ public class MemoryUnit extends FunctionalUnit
             WriteBackStage.getInstance().acceptInstruction(inst);
             updateExitClockCycle(inst);
         }
-        instructionQueue.removeLast();
-        instructionQueue.addFirst(new NOOP());
+        rotatePipe();
 
     }
 
@@ -103,7 +97,7 @@ public class MemoryUnit extends FunctionalUnit
     public int getClockCyclesRequiredForNonPipeLinedUnit() throws Exception
     {
         // TODO Auto-generated method stub
-        Instruction inst = instructionQueue.peekLast();
+        Instruction inst = peekFirst();
         if (inst.instructionType.equals(InstructionType.MEMORY_FPREG)
                 || inst.instructionType.equals(InstructionType.MEMORY_REG))
             return clockCyclesRequired;

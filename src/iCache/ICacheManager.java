@@ -25,6 +25,8 @@ public class ICacheManager {
 	int clockCyclesToBlock;
 	int delayToBus;
 	boolean cacheHit;
+	private int                       iCacheAccessRequests;
+    private int                       iCacheAccessHits;
 
 	private static volatile ICacheManager instance;
 
@@ -57,13 +59,14 @@ public class ICacheManager {
 	public Instruction getInstructionFromCache(int pc) throws Exception {
 
 		if (lastRequestInstruction == -1) {
-
+			 iCacheAccessRequests++;
 			if (ICache.getInstance().isInstructionInCache(pc)) {
 
 				lastRequestInstruction = pc;
 				lastRequestCycle = CPU.CLOCK;
 				clockCyclesToBlock = ConfigManager.instance.ICacheLatency - 1;
 				cacheHit = true;
+				iCacheAccessHits++;
 
 				if (clockCyclesToBlock == 0) {
 
@@ -100,4 +103,27 @@ public class ICacheManager {
 		}
 
 	}
+	
+	public String getICacheStatistics()
+    {
+        String format = "%-60s %4s";
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format(format,
+                "Total number of access requests for instruction cache:",
+                getICacheAccessRequests()));
+        sb.append('\n');
+        sb.append(String.format(format, "Number of instruction cache hits:",
+                getICacheAccessHits()));
+        return sb.toString();
+    }
+	
+	public int getICacheAccessRequests()
+    {
+        return iCacheAccessRequests;
+    }
+
+    public int getICacheAccessHits()
+    {
+        return iCacheAccessHits;
+    }
 }

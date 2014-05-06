@@ -11,7 +11,6 @@ import instructions.NOOP;
 import instructions.SourceObject;
 import instructions.WriteBackObject;
 
-import java.util.ArrayDeque;
 import java.util.List;
 
 import program.ProgramManager;
@@ -42,21 +41,16 @@ public class DecodeUnit extends FunctionalUnit
     private DecodeUnit()
     {
         super();
-        this.isPipelined = false;
-        this.clockCyclesRequired = 1;
-        this.pipelineSize = 1;
-        this.stageId = StageType.IDSTAGE;
-
-        this.instructionQueue = new ArrayDeque<Instruction>();
-        for (int i = 0; i < this.pipelineSize; i++)
-            this.instructionQueue.add(new NOOP());
-
+        isPipelined = false;
+        clockCyclesRequired = 1;
+        pipelineSize = 1;
+        stageId = StageType.IDSTAGE;
+        createPipelineQueue(pipelineSize);
     }
 
     @Override
     public int getClockCyclesRequiredForNonPipeLinedUnit()
     {
-        // TODO Auto-generated method stub
         return clockCyclesRequired;
     }
 
@@ -66,7 +60,7 @@ public class DecodeUnit extends FunctionalUnit
         // Called by the decode stage
         validateQueueSize();
 
-        Instruction inst = instructionQueue.peekLast();
+        Instruction inst = peekFirst();
 
         if (inst instanceof NOOP)
             return;
@@ -160,11 +154,8 @@ public class DecodeUnit extends FunctionalUnit
             ExStage.getInstance().acceptInstruction(inst);
 
         }
-        instructionQueue.removeLast();
-        instructionQueue.addFirst(new NOOP());
 
-        validateQueueSize();
-
+        rotatePipe();
     }
 
     private boolean processStruct(Instruction inst) throws Exception

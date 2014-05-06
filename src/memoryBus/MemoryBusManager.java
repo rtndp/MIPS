@@ -3,24 +3,17 @@ package memoryBus;
 public class MemoryBusManager
 {
 
-	private static volatile MemoryBusManager instance;
+    public static final MemoryBusManager instance = new MemoryBusManager();
 
-	public static MemoryBusManager getInstance() {
-		if (null == instance)
-			synchronized (MemoryBusManager.class) {
-				if (null == instance)
-					instance = new MemoryBusManager();
-			}
+    private MemoryBusManager()
+    {
 
-		return instance;
-	}
-	
-	
-	public int getDelayFromBCM(){
-		
-		return 0;
-		
-	}
-	
-	
+    }
+
+    public int getDelay()
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
 }

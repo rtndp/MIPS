@@ -1,61 +1,75 @@
 package dCache;
 
-import memory.DataMemoryManager;
+public class DCache
+{
+    DCacheSet[] dCacheSet;
 
-public class DCache {
-	public static final DCache instance = new DCache();
+    public DCache()
+    {
+        dCacheSet = new DCacheSet[2];
+        dCacheSet[0] = new DCacheSet();
+        dCacheSet[1] = new DCacheSet();
+    }
+    
+    private DCacheSet getSet(int address)
+    {
+        int setId = address & 0b10000;
+        setId = setId >> 4;
+        return dCacheSet[setId];
+    }
 
-	DCacheSet[] dCacheSet = new DCacheSet[2];
+    private int getBaseAddress(int address)
+    {
+        int baseAddress = address >> 2;
+        baseAddress = baseAddress << 2;
+        return baseAddress;
+    }
 
-	public DCache() {
-		for (int i = 0; i < 2; i++) {
-			dCacheSet[i] = new DCacheSet();
-		}
-	}
+    public boolean doesAddressExist(int address)
+    {
+        DCacheSet set = getSet(address);
+        int baseAddress = getBaseAddress(address);
+        return set.doesAddressExist(baseAddress);
+    }
 
-	public boolean isDataInCache(int address) {
+    public boolean isThereAFreeBlock(int address)
+    {
+        DCacheSet set = getSet(address);
+        return set.hasFreeBlock();
+    }
 
-		int setIndex;
-		int tempAddress = address;
+    public boolean isLRUBlockDirty(int address)
+    {
+        DCacheSet set = getSet(address);
+        return set.isLRUBlockDirty();
+    }
 
-		// To store the remaining 26/28 bits of address
-		int tag = address >> 5;
+    public void updateBlock(int address, boolean store) throws Exception
+    {
+        // TODO Auto-generated method stub
+        DCacheSet set = getSet(address);
+        int baseAddress = getBaseAddress(address);
 
-		// What Set?
-		setIndex = address & 0b10000;
+        DCacheBlock block = null;
+        // update same address block, if not then free block , if not then
+        // lrublock
+        if (doesAddressExist(address))
+        {
+            block = set.getAddressBlock(baseAddress);
+        }
+        else if (isThereAFreeBlock(address))
+        {
+            block = set.getEmptyBlock(baseAddress);
+        }
+        else
+        {
+            block = set.getLRUBlock();
+        }
+        if (block == null)
+            throw new Exception("DCache cannot find a null block");
+        block.baseAddress = baseAddress;
+        block.dirty = store;
+        set.toggleLRU(block);
+    }
 
-		DCacheSet dCacheSet = this.dCacheSet[setIndex];
-
-		for (int i = 0; i < 2; i++) {
-			if (tag == dCacheSet.dCacheBlocks[i].tag)
-				return true;
-		}
-
-		return false;
-	}
-
-	public void populateDCache(int address) throws Exception {
-
-		int setIndex;
-		int tempAddress = address;
-
-		// To store the remaining 26/28 bits of address
-		int tag = tempAddress >> 5;
-
-		// What Set?
-		setIndex = tempAddress & 0b10000;
-
-
-		DCacheSet dCacheSet = this.dCacheSet[setIndex];
-		
-		DCacheBlock dCacheBlock = new DCacheBlock(
-				DataMemoryManager.instance.getMemoryBlockOfAddress(address));
-		
-		dCacheSet.dCacheBlocks[dCacheSet.lru] = dCacheBlock;
-		
-		if(dCacheSet.lru == 0)
-			dCacheSet.lru = 1;
-		else
-			dCacheSet.lru = 0;
-	}
 }

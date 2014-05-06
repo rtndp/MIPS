@@ -94,8 +94,10 @@ public class ExStage extends Stage
             {
                 fu.markStructHazard();
                 // TODO for pipelined FPFunctionalUnit, move things 1 right
-                if(fu instanceof FPFunctionalUnit)
+
+                if (fu instanceof FPFunctionalUnit)
                     ((FPFunctionalUnit) fu).rotatePipelineOnHazard();
+
             }
             // for exeList, execute
             for (FunctionalUnit fu : exeList)
@@ -202,8 +204,9 @@ public class ExStage extends Stage
         {
 
             FunctionalUnit mapEntry = (FunctionalUnit) map.get(calculatedKey);
-            int fuEntry = fu.instructionQueue.peekLast().entryCycle[0];
-            int localEntry = mapEntry.instructionQueue.peekLast().entryCycle[0];
+            int fuEntry = fu.peekFirst().entryCycle[StageType.IFSTAGE.getId()];
+            int localEntry = mapEntry.peekFirst().entryCycle[StageType.IFSTAGE
+                    .getId()];
             if (fuEntry < localEntry)
                 map.put(calculatedKey, fu);
 

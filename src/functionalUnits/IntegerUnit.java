@@ -2,9 +2,6 @@ package functionalUnits;
 
 import instructions.Instruction;
 import instructions.NOOP;
-
-import java.util.ArrayDeque;
-
 import stages.StageType;
 
 public class IntegerUnit extends FunctionalUnit
@@ -27,15 +24,11 @@ public class IntegerUnit extends FunctionalUnit
     private IntegerUnit()
     {
         super();
-        this.isPipelined = false;
-        this.clockCyclesRequired = 1;
-        this.pipelineSize = 1;
-
-        this.instructionQueue = new ArrayDeque<Instruction>();
-        for (int i = 0; i < this.pipelineSize; i++)
-            this.instructionQueue.add(new NOOP());
-
-        this.stageId = StageType.EXSTAGE;
+        isPipelined = false;
+        clockCyclesRequired = 1;
+        pipelineSize = 1;
+        stageId = StageType.EXSTAGE;
+        createPipelineQueue(pipelineSize);
 
     }
 
@@ -44,7 +37,7 @@ public class IntegerUnit extends FunctionalUnit
     {
         validateQueueSize();
 
-        Instruction inst = instructionQueue.peekLast();
+        Instruction inst = peekFirst();
 
         if (inst instanceof NOOP)
             return;
@@ -55,8 +48,7 @@ public class IntegerUnit extends FunctionalUnit
         {
             MemoryUnit.getInstance().acceptInstruction(inst);
             updateExitClockCycle(inst);
-            instructionQueue.removeLast();
-            instructionQueue.addFirst(new NOOP());
+            rotatePipe();
         }
         else
         {
@@ -68,7 +60,6 @@ public class IntegerUnit extends FunctionalUnit
     @Override
     public int getClockCyclesRequiredForNonPipeLinedUnit()
     {
-        // TODO Auto-generated method stub
         return clockCyclesRequired;
     }
 }

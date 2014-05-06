@@ -3,9 +3,6 @@ package functionalUnits;
 import instructions.Instruction;
 import instructions.NOOP;
 import instructions.WriteBackObject;
-
-import java.util.ArrayDeque;
-
 import registers.RegisterManager;
 import results.ResultsManager;
 import stages.CPU;
@@ -31,20 +28,17 @@ public class WriteBackUnit extends FunctionalUnit
     private WriteBackUnit()
     {
         super();
-        this.isPipelined = false;
-        this.clockCyclesRequired = 1;
-        this.pipelineSize = 1;
-        this.instructionQueue = new ArrayDeque<Instruction>();
-        this.instructionQueue.add(new NOOP());
-
-        this.stageId = StageType.WBSTAGE;
-
+        isPipelined = false;
+        clockCyclesRequired = 1;
+        pipelineSize = 1;
+        stageId = StageType.WBSTAGE;
+        createPipelineQueue(pipelineSize);
     }
 
     @Override
     public void executeUnit() throws Exception
     {
-        Instruction inst = instructionQueue.peekLast();
+        Instruction inst = peekFirst();
 
         if (inst instanceof NOOP)
             return;
@@ -70,8 +64,7 @@ public class WriteBackUnit extends FunctionalUnit
         ResultsManager.instance.addInstruction(inst);
 
         // Remove the instruction from the queue and enqueue a NOOP
-        instructionQueue.remove();
-        instructionQueue.add(new NOOP());
+        rotatePipe();
     }
 
     @Override
