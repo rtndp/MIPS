@@ -59,7 +59,7 @@ public abstract class Instruction implements InstructionI
 
     public String debugString()
     {
-        return String.format(Utils.Constants.instructionDebugFormatString,
+        return String.format(utility.Constants.instructionDebugFormatString,
                 printableInstruction, Arrays.toString(entryCycle),
                 Arrays.toString(exitCycle), RAW ? 'Y' : 'N', WAR ? 'Y' : 'N',
                 WAW ? 'Y' : 'N', STRUCT ? 'Y' : 'N');
@@ -67,7 +67,7 @@ public abstract class Instruction implements InstructionI
 
     public String getOutputString()
     {
-        return String.format(Utils.Constants.instructionOutputFormatString,
+        return String.format(utility.Constants.instructionOutputFormatString,
                 printableInstruction, exitCycle[0] != 0 ? exitCycle[0] : "",
                 exitCycle[1] != 0 ? exitCycle[1] : "",
                 exitCycle[2] != 0 ? exitCycle[2] : "",

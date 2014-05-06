@@ -3,7 +3,7 @@ package memory;
 import java.util.Map;
 import java.util.TreeMap;
 
-import Utils.Utils;
+import utility.Utils;
 
 public class DataMemoryManager
 {
@@ -57,7 +57,7 @@ public class DataMemoryManager
     {
         Map<Integer, Integer> returnMap = new TreeMap<Integer, Integer>();
 
-        if (!Utils.isPowerOf2(blocksize))
+        if (!Utils.xraisedTo2(blocksize))
             throw new Exception("Need a power of 2 only for block size "
                     + blocksize);
         int temp = address - (address % blocksize);

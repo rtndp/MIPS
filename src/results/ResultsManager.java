@@ -40,7 +40,7 @@ public class ResultsManager
     {
 
         System.out.println(String.format(
-                Utils.Constants.instructionOutputFormatString, "Instruction",
+                utility.Constants.instructionOutputFormatString, "Instruction",
                 "FT", "ID", "EX", "WB", "RAW", "WAR", "WAW", "Struct"));
         for (int key : instructionMap.keySet())
         {
@@ -58,7 +58,7 @@ public class ResultsManager
         try
         {
             resultsWriter.write(String.format(
-                    Utils.Constants.instructionOutputFormatString,
+                    utility.Constants.instructionOutputFormatString,
                     "Instruction", "FT", "ID", "EX", "WB", "RAW", "WAR", "WAW",
                     "Struct"));
             resultsWriter.newLine();
